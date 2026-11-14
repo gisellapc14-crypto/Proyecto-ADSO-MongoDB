@@ -78,6 +78,7 @@ router.post("/login", async (req, res) => {
             email: user.email,
             born: user.born,
             phone: user.phone,
+            fotoPerfil: user.fotoPerfil || '',
             role: user.role || 'cliente'
         };
 
@@ -98,9 +99,52 @@ router.get('/perfil', autenticar, (req, res) => {
         id: req.usuario._id,
         name: req.usuario.name,
         email: req.usuario.email,
+        born: req.usuario.born,
         phone: req.usuario.phone,
+        fotoPerfil: req.usuario.fotoPerfil || '',
         role: req.usuario.role || 'cliente'
     });
+});
+
+router.put('/perfil', autenticar, async (req, res) => {
+    try {
+        const { name, born, phone, fotoPerfil } = req.body;
+        const nombre = String(name || '').trim();
+        const nacimiento = String(born || '').trim();
+        const telefono = String(phone || '').trim();
+
+        if (nombre.length < 2 || nombre.length > 80 || !nacimiento || nacimiento.length > 60 || telefono.length < 7 || telefono.length > 30) {
+            return res.status(400).json({ error: 'Verifica tu nombre, fecha de nacimiento y teléfono.' });
+        }
+
+        const foto = fotoPerfil === undefined ? req.usuario.fotoPerfil || '' : String(fotoPerfil || '');
+        const esFotoValida = !foto || /^data:image\/(png|jpe?g|webp);base64,[a-z0-9+/=]+$/i.test(foto);
+        if (!esFotoValida || foto.length > 750000) {
+            return res.status(400).json({ error: 'La foto debe ser PNG, JPG o WEBP y tener un tamaño reducido.' });
+        }
+
+        const usuario = await User.findByIdAndUpdate(
+            req.usuario._id,
+            { name: nombre, born: nacimiento, phone: telefono, fotoPerfil: foto },
+            { new: true, runValidators: true }
+        );
+
+        res.json({
+            message: 'Tu perfil fue actualizado correctamente.',
+            user: {
+                id: usuario._id,
+                name: usuario.name,
+                email: usuario.email,
+                born: usuario.born,
+                phone: usuario.phone,
+                fotoPerfil: usuario.fotoPerfil || '',
+                role: usuario.role || 'cliente'
+            }
+        });
+    } catch (error) {
+        console.error('Error al actualizar perfil:', error.message);
+        res.status(500).json({ error: 'No se pudo actualizar tu perfil.' });
+    }
 });
 
 module.exports = router;

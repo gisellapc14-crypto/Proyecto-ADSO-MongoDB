@@ -9,7 +9,7 @@ async function autenticar(req, res, next) {
 
   try {
     const datos = jwt.verify(token, process.env.JWT_SECRET);
-    const usuario = await User.findById(datos.id).select('_id name email phone role');
+    const usuario = await User.findById(datos.id).select('_id name email born phone fotoPerfil role');
     if (!usuario) return res.status(401).json({ error: 'La sesión ya no es válida. Inicia sesión nuevamente.' });
     req.usuario = usuario;
     next();

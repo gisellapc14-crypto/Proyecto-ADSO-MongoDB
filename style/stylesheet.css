@@ -1411,3 +1411,84 @@ footer a {
   .access-page .registro-box { padding:30px 22px; }
   .access-page .avion { display:none; }
 }
+
+/* Perfil privado de RallyTraver */
+.rt-site .rt-profile-layout { max-width:1120px; margin:0 auto; display:grid; grid-template-columns:minmax(260px,.7fr) minmax(0,1.45fr); gap:28px; align-items:start; }
+.rt-site .rt-profile-summary,.rt-site .rt-profile-form { background:#fff; border:1px solid #e0e9f2; border-radius:20px; box-shadow:0 12px 28px rgba(7,29,73,.08); }
+.rt-site .rt-profile-summary { padding:34px 28px; text-align:center; position:sticky; top:18px; }
+.rt-site .rt-avatar { width:126px; height:126px; margin:0 auto 18px; border-radius:50%; overflow:hidden; display:grid; place-items:center; position:relative; color:#fff; background:linear-gradient(135deg,var(--rt-blue),var(--rt-pink)); box-shadow:0 10px 22px rgba(3,95,156,.22); font-size:2.25rem; font-weight:800; }
+.rt-site .rt-avatar img { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
+.rt-site .rt-profile-summary h2 { margin:0; color:var(--rt-navy); font-size:1.32rem; }
+.rt-site .rt-profile-summary p { margin:7px 0 14px; color:#60758a; font-size:.88rem; overflow-wrap:anywhere; }
+.rt-site .rt-profile-role { display:inline-block; padding:6px 12px; border-radius:999px; color:var(--rt-blue); background:#e8f5ff; font-size:.8rem; font-weight:800; }
+.rt-site .rt-profile-links { margin-top:25px; display:grid; gap:10px; }
+.rt-site .rt-profile-links a { text-decoration:none; }
+.rt-site .rt-secondary { display:inline-flex; justify-content:center; align-items:center; padding:11px 18px; border:1px solid #cbd9e8; border-radius:10px; color:var(--rt-navy); background:#fff; font-weight:700; }
+.rt-site .rt-profile-form { padding:34px; }
+.rt-site .rt-profile-form-heading { display:flex; justify-content:space-between; gap:20px; align-items:start; margin-bottom:26px; padding-bottom:20px; border-bottom:1px solid #e5edf5; }
+.rt-site .rt-profile-form-heading .rt-eyebrow { margin:0 0 7px; }
+.rt-site .rt-profile-form-heading h2 { margin:0; color:var(--rt-navy); font-size:1.55rem; }
+.rt-site .rt-profile-form-heading > p { max-width:270px; margin:2px 0 0; color:#60758a; font-size:.86rem; line-height:1.55; }
+.rt-site .rt-photo-control { padding:17px; background:#f4f9fd; border:1px dashed #b9cee1; border-radius:14px; margin-bottom:22px; }
+.rt-site .rt-photo-control label { display:block; margin-bottom:11px; color:var(--rt-navy); font-weight:800; }
+.rt-site .rt-photo-control small { display:block; color:#60758a; font-size:.77rem; font-weight:500; margin-top:3px; }
+.rt-site .rt-photo-control > div { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+.rt-site .rt-photo-control input { max-width:100%; color:#52677c; font:inherit; font-size:.84rem; }
+.rt-site .rt-text-button { border:0; background:transparent; color:var(--rt-pink); cursor:pointer; font:inherit; font-size:.84rem; font-weight:800; }
+.rt-site .rt-profile-fields { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.rt-site .rt-profile-fields label { display:grid; gap:7px; color:var(--rt-navy); font-size:.84rem; font-weight:800; }
+.rt-site .rt-profile-fields input { width:100%; box-sizing:border-box; border:1px solid #bfd0df; border-radius:9px; padding:12px 13px; color:var(--rt-ink); background:#fff; font:inherit; font-size:.92rem; }
+.rt-site .rt-profile-fields input:focus { outline:3px solid rgba(3,95,156,.14); border-color:var(--rt-blue); }
+.rt-site .rt-profile-fields input[readonly] { color:#687c90; background:#f4f7fa; cursor:not-allowed; }
+.rt-site .rt-profile-status { min-height:1.4em; margin:20px 0 13px; color:#087a3f; font-size:.87rem; font-weight:700; }
+.rt-site .rt-profile-status.is-error { color:#b42318; }
+@media (max-width:760px) {
+  .rt-site .rt-profile-layout,.rt-site .rt-profile-fields { grid-template-columns:1fr; }
+  .rt-site .rt-profile-summary { position:static; }
+  .rt-site .rt-profile-form { padding:26px 20px; }
+  .rt-site .rt-profile-form-heading { flex-direction:column; }
+}
+
+/* Menús compactos de navegación */
+.rt-site .rt-nav { flex-wrap:nowrap; }
+.rt-site .rt-nav-menu { position:relative; flex:0 0 auto; }
+.rt-site .rt-nav-menu-toggle { display:inline-flex; align-items:center; gap:4px; padding:7px 4px; border:0; background:transparent; color:var(--rt-ink); cursor:pointer; font:inherit; font-size:.84rem; font-weight:600; white-space:nowrap; }
+.rt-site .rt-nav-menu-toggle:hover,.rt-site .rt-nav-menu.is-open .rt-nav-menu-toggle { color:var(--rt-pink); }
+.rt-site .rt-nav-dropdown { position:absolute; z-index:80; top:calc(100% + 12px); right:0; min-width:194px; overflow:hidden; border:1px solid #dbe6ef; border-radius:13px; background:#fff; box-shadow:0 15px 30px rgba(7,29,73,.18); }
+.rt-site .rt-nav-menu[data-nav-menu='explorar'] .rt-nav-dropdown { left:0; right:auto; }
+.rt-site .rt-nav-dropdown[hidden] { display:none; }
+.rt-site .rt-nav-dropdown a,.rt-site .rt-nav-dropdown-logout { display:block; box-sizing:border-box; width:100%; padding:11px 15px; border:0; border-bottom:1px solid #edf2f7; background:#fff; color:var(--rt-ink); cursor:pointer; font:inherit; font-size:.84rem; font-weight:600; text-align:left; text-decoration:none; white-space:nowrap; }
+.rt-site .rt-nav-dropdown > :last-child { border-bottom:0; }
+.rt-site .rt-nav-dropdown a:hover,.rt-site .rt-nav-dropdown-logout:hover { background:#f2f8fc; color:var(--rt-pink); }
+.rt-site .rt-nav-dropdown-logout { color:#b42318; }
+@media (max-width:760px) {
+  .rt-site .rt-nav-menu { width:100%; }
+  .rt-site .rt-nav-menu-toggle { width:100%; justify-content:space-between; padding:8px 4px; }
+  .rt-site .rt-nav-dropdown,.rt-site .rt-nav-menu[data-nav-menu='explorar'] .rt-nav-dropdown { position:static; min-width:0; margin:4px 0 6px; box-shadow:none; border-radius:9px; }
+}
+
+/* Solicitud de vuelos */
+.rt-site .rt-flight-hero { min-height:290px; display:flex; align-items:center; padding:52px max(7vw,28px); background:linear-gradient(110deg,rgba(7,29,73,.96),rgba(3,95,156,.86)),url('../Images/plane.JPG') center/cover; color:#fff; }
+.rt-site .rt-flight-hero > div { width:min(760px,100%); }
+.rt-site .rt-flight-hero h1 { max-width:720px; margin:7px 0 12px; font-size:clamp(2rem,4vw,3.3rem); line-height:1.08; }
+.rt-site .rt-flight-hero p:not(.rt-eyebrow) { max-width:640px; margin:0; font-size:1.02rem; line-height:1.65; }
+.rt-site .rt-flight-hero .rt-eyebrow { margin:0; color:#a9e2ff; }
+.rt-site .rt-flight-form { width:min(960px,100%); box-sizing:border-box; margin:0 auto; padding:34px; border:1px solid #dce7f1; border-radius:20px; background:#fff; box-shadow:0 12px 28px rgba(7,29,73,.08); }
+.rt-site .rt-flight-heading { display:flex; justify-content:space-between; gap:25px; align-items:start; margin-bottom:25px; padding-bottom:18px; border-bottom:1px solid #e4edf4; }
+.rt-site .rt-flight-heading .rt-eyebrow { margin:0 0 7px; }
+.rt-site .rt-flight-heading h2 { margin:0; color:var(--rt-navy); font-size:1.6rem; }
+.rt-site .rt-flight-heading > p { max-width:270px; margin:2px 0 0; color:#60758a; font-size:.87rem; line-height:1.55; }
+.rt-site .rt-flight-fields { display:grid; grid-template-columns:repeat(2,1fr); gap:17px; }
+.rt-site .rt-flight-fields label,.rt-site .rt-flight-comment { display:grid; gap:7px; color:var(--rt-navy); font-size:.84rem; font-weight:800; }
+.rt-site .rt-flight-fields input,.rt-site .rt-flight-fields select,.rt-site .rt-flight-comment textarea { width:100%; box-sizing:border-box; border:1px solid #bfd0df; border-radius:9px; padding:12px 13px; color:var(--rt-ink); background:#fff; font:inherit; font-size:.92rem; }
+.rt-site .rt-flight-comment { margin:18px 0 0; }
+.rt-site .rt-flight-comment textarea { min-height:90px; resize:vertical; }
+.rt-site .rt-flight-fields input:focus,.rt-site .rt-flight-fields select:focus,.rt-site .rt-flight-comment textarea:focus { outline:3px solid rgba(3,95,156,.14); border-color:var(--rt-blue); }
+.rt-site .rt-flight-status { min-height:1.4em; margin:18px 0 12px; color:#087a3f; font-size:.88rem; font-weight:700; }
+.rt-site .rt-flight-status.is-error { color:#b42318; }
+@media (max-width:760px) {
+  .rt-site .rt-flight-hero { min-height:235px; padding:42px 22px; }
+  .rt-site .rt-flight-form { padding:26px 20px; }
+  .rt-site .rt-flight-heading { flex-direction:column; }
+  .rt-site .rt-flight-fields { grid-template-columns:1fr; }
+}

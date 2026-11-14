@@ -4,7 +4,10 @@
 const conectarDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log('MongoDB conectado correctamente');
+    const proveedor = process.env.MONGO_URI?.startsWith('mongodb+srv://')
+      ? 'MongoDB Atlas'
+      : 'MongoDB local';
+    console.log(`MongoDB conectado correctamente (${proveedor})`);
   } catch (error) {
     console.error('Error al conectar MongoDB:', error.message);
     throw error;
