@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RallyTraver - Inicia sesión</title>
+    <link rel="stylesheet" href="style/stylesheet.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="access-page">
+    <header class="access-header">
+        <nav class="navbar access-navbar" aria-label="Navegación principal">
+            <div class="platform-menu">
+                <button class="platform-menu-toggle" id="menu-explorar" type="button" aria-expanded="false" aria-controls="opciones-explorar"><span aria-hidden="true">☰</span><span>Explorar</span></button>
+                <div class="platform-dropdown" id="opciones-explorar" hidden>
+                    <a href="paginaprincipal.html">Inicio</a>
+                    <a href="landingpage.html">Destinos</a>
+                    <a href="landingpage.html?categoria=internacional">Paquetes</a>
+                    <a href="landingpage.html?hoteles=true">Hoteles</a>
+                    <button class="platform-menu-placeholder" type="button" disabled>Vuelos</button>
+                    <a href="nosotros.html">Acerca de Nosotros</a>
+                    <a href="ayuda.html">Centro de Ayuda</a>
+                    <a href="registrese.html">Crear cuenta</a>
+                </div>
+            </div>
+            <ul class="access-links">
+                <li><a href="paginaprincipal.html">Inicio</a></li>
+                <li><a href="nosotros.html">Acerca de Nosotros</a></li>
+                <li><a href="ayuda.html">Centro de Ayuda</a></li>
+            </ul>
+            <img src="Images/logo.png" alt="Logo RallyTraver" class="mini-logo access-logo">
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="left">
+            <img src="images/logo.png" alt="Logo principal" class="logo">
+        </section>
+
+        <section class="right">
+            <h2 class="titulo">Ingresa</h2>
+            <p class="subtitulo">Inicia sesión para continuar</p>
+
+            <form id="form-login" novalidate>
+                <label for="usuario">CORREO ELECTRONICO O USUARIO</label>
+                <input type="text" id="usuario" placeholder=" " autocomplete="username" required>
+
+                <label for="password">CONTRASEÑA</label>
+                <div class="password-container">
+                    <input type="password" id="password" placeholder=" " autocomplete="current-password" required minlength="6">
+                    <button class="ver password-toggle" type="button" aria-label="Mostrar contraseña">👁️</button>
+                </div>
+
+                <div class="opciones">
+                    <label><input type="checkbox" id="recordarme"> Recuérdame</label>
+                    <a href="recuperar.html">¿Olvidaste tu Contraseña?</a>
+                </div>
+
+                <button class="btn-ingresar" type="submit">Ingresar</button>
+                <p class="form-status" id="estado-login" aria-live="polite"></p>
+
+                <div class="divider"></div>
+
+                <button class="btn-google" type="button">
+                    <img src="images/google.webp" alt="Google">Continuar con Google</button>
+                <button class="btn-facebook" type="button"> 
+                    <img src="images/facebook.webp" alt="Facebook">Continuar con Facebook</button>
+
+                <p class="registrate">¿No tienes cuenta? <a href="registrese.html">Regístrate</a></p>
+
+                <p class="condiciones">
+                    Al iniciar sesión confirmas que aceptas los <a href="terminos.html">Términos y condiciones</a> y la <a href="privacidad.html">Política de privacidad</a> de RallyTraver.
+                </p>
+            </form>
+        </section>
+    </main>
+    <script src="script-login.js"></script>
+</body>
+</html>

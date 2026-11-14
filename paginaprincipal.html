@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RallyTraver: vuelos, paquetes, hoteles y experiencias para viajar a tu manera.">
+  <title>RallyTraver | Viaja a tu manera</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style/stylesheet.css">
+</head>
+<body class="rt-site" data-page="inicio">
+  <header class="rt-header">
+    <a class="rt-brand" href="paginaprincipal.html" aria-label="Inicio RallyTraver">
+      <img src="Images/logo.png" alt="Logo RallyTraver"><span>RallyTraver</span>
+    </a>
+    <button class="rt-menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false">☰</button>
+    <nav class="rt-nav" aria-label="Navegación principal">
+      <a href="paginaprincipal.html">Inicio</a>
+      <a href="landingpage.html">Destinos</a>
+      <a href="landingpage.html?categoria=internacional">Paquetes</a>
+      <a href="landingpage.html?hoteles=true">Hoteles</a>
+      <a href="nosotros.html">Acerca de nosotros</a><a href="ayuda.html">Centro de ayuda</a>
+      <a class="rt-login" href="index.html">Iniciar sesión</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="rt-hero" id="inicio">
+      <div class="rt-hero-content">
+        <span class="rt-eyebrow">VUELOS · PAQUETES · HOTELES</span>
+        <h1>El viaje que imaginas empieza aquí.</h1>
+        <p>Explora Colombia y el mundo con experiencias diseñadas para viajar a tu manera.</p>
+        <a class="rt-primary" href="landingpage.html">Explorar destinos</a>
+      </div>
+    </section>
+
+    <section class="rt-search-box" aria-label="Cotizador rápido">
+      <div class="rt-tabs" role="tablist" aria-label="Tipo de cotización">
+        <button type="button" role="tab" aria-selected="true" data-quote-type="Vuelos">Vuelos</button>
+        <button type="button" role="tab" aria-selected="false" data-quote-type="Paquetes">Paquetes</button>
+        <button type="button" role="tab" aria-selected="false" data-quote-type="Hoteles">Hoteles</button>
+      </div>
+      <form class="rt-search-form" id="form-cotizacion">
+        <div class="rt-field"><label for="origen">Origen</label><input id="origen" name="origen" placeholder="¿Desde dónde viajas?" required></div>
+        <div class="rt-field"><label for="destino-cotizacion">Destino</label><input id="destino-cotizacion" name="destino" placeholder="¿A dónde quieres ir?" required></div>
+        <button class="rt-primary" type="submit">Cotizar ahora</button>
+      </form>
+    </section>
+
+    <section class="rt-section">
+      <div class="rt-section-heading"><div><h2>Todo para vivir tu próximo viaje</h2><p>Planea con claridad: encuentra vuelos, paquetes, estadías y asistencia para cada etapa.</p></div></div>
+      <div class="rt-grid">
+        <article class="rt-service"><div class="rt-service-icon">✈</div><h3>Vuelos</h3><p>Opciones de ruta y horario para que solicites una cotización a tu medida.</p></article>
+        <article class="rt-service"><div class="rt-service-icon">▣</div><h3>Paquetes</h3><p>Experiencias organizadas con destinos, alojamiento y planes para explorar.</p></article>
+        <article class="rt-service"><div class="rt-service-icon">⌂</div><h3>Hoteles</h3><p>Alojamientos sugeridos en destinos nacionales e internacionales.</p></article>
+        <article class="rt-service"><div class="rt-service-icon">♥</div><h3>Favoritos</h3><p>Guarda las experiencias que te gusten para revisarlas cuando quieras.</p></article>
+      </div>
+    </section>
+
+    <section class="rt-section rt-section-alt" id="destacados">
+      <div class="rt-section-heading"><div><h2>Destinos destacados</h2><p>Una selección para inspirar tu próxima salida.</p></div><a class="rt-secondary" href="landingpage.html">Ver todos los destinos</a></div>
+      <div id="destinos-destacados" class="rt-destinos-grid" aria-live="polite"><p class="rt-empty">Cargando experiencias...</p></div>
+    </section>
+
+    <section class="rt-section">
+      <div class="rt-banner"><div class="rt-banner-content"><h2>Viajar bien es viajar con confianza.</h2><p>Conoce información clara de cada destino y envíanos tu solicitud. Te acompañaremos para preparar una experiencia a tu medida.</p><a class="rt-primary" href="landingpage.html?categoria=nacional">Ver experiencias nacionales</a></div><div class="rt-banner-image" aria-label="Viajeros disfrutando una experiencia"></div></div>
+    </section>
+
+    <section class="rt-section rt-section-alt">
+      <div class="rt-benefits"><div class="rt-benefit"><strong>Destinos seleccionados</strong><span>Información organizada de viajes nacionales e internacionales.</span></div><div class="rt-benefit"><strong>Cotización personalizada</strong><span>Cuéntanos tus fechas e intereses para responderte con una opción.</span></div><div class="rt-benefit"><strong>Atención cercana</strong><span>Seguimiento a tu solicitud por el equipo de RallyTraver.</span></div></div>
+    </section>
+
+    <section class="rt-section" id="ayuda"><div class="rt-faq"><h2>Centro de ayuda</h2><details><summary>¿Cómo solicito una cotización?</summary><p>Selecciona la opción que te interesa, completa el formulario y registraremos tu solicitud para contactarte.</p></details><details><summary>¿Los precios son definitivos?</summary><p>Los valores publicados son precios desde y pueden variar según fecha, disponibilidad y número de viajeros.</p></details><details><summary>¿Puedo guardar una experiencia?</summary><p>Sí. Usa el ícono de corazón en cada tarjeta; se guardará en este navegador para que la encuentres fácilmente.</p></details></div></section>
+  </main>
+
+  <footer class="rt-footer">
+    <div><div class="rt-footer-brand"><img src="Images/logo.png" alt=""><span>RallyTraver</span></div><p>Agencia de viajes para descubrir nuevos destinos con una planeación más simple y cercana.</p></div>
+    <div><h3>Explora</h3><ul><li><a href="landingpage.html">Todos los destinos</a></li><li><a href="landingpage.html?categoria=nacional">Nacionales</a></li><li><a href="landingpage.html?categoria=internacional">Internacionales</a></li><li><a href="landingpage.html?categoria=pasadia">Pasadías</a></li></ul></div>
+    <div><h3>¿Necesitas ayuda?</h3><ul><li><a href="#ayuda">Preguntas frecuentes</a></li><li><a href="https://wa.me/573163110229" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="mailto:rallytraver4@gmail.com">rallytraver4@gmail.com</a></li></ul></div>
+    <div class="rt-copy">© 2026 RallyTraver · Agencia de viajes.</div>
+  </footer>
+
+  <a class="rt-whatsapp" href="https://wa.me/573163110229" target="_blank" rel="noopener" aria-label="Escribir a RallyTraver por WhatsApp">◉ WhatsApp</a>
+
+  <dialog class="rt-modal" id="modal-destino"><div class="rt-modal-content"><button class="rt-modal-close" type="button" aria-label="Cerrar">×</button><div id="detalle-destino"></div></div></dialog>
+  <dialog class="rt-modal" id="modal-solicitud"><div class="rt-modal-content"><button class="rt-modal-close" type="button" aria-label="Cerrar">×</button><form class="rt-form" id="form-solicitud"><h2 id="solicitud-titulo">Solicitar cotización</h2><input type="hidden" id="solicitud-tipo" name="tipo"><label for="solicitud-nombre">Nombre</label><input id="solicitud-nombre" name="nombre" autocomplete="name" required><label for="solicitud-email">Correo electrónico</label><input id="solicitud-email" name="email" type="email" autocomplete="email" required><label for="solicitud-mensaje">Cuéntanos lo que necesitas</label><textarea id="solicitud-mensaje" name="mensaje" required></textarea><button type="submit">Enviar solicitud</button><p class="rt-status" aria-live="polite"></p></form></div></dialog>
+  <dialog class="rt-modal" id="modal-reserva"><div class="rt-modal-content"><button class="rt-modal-close" type="button" aria-label="Cerrar">×</button><form class="rt-form" id="form-reserva"><h2>Confirmar reserva</h2><input type="hidden" id="reserva-destino-id" name="destinoId"><p class="rt-reserva-destino" id="reserva-destino-nombre"></p><p class="rt-reserva-note">Tu solicitud quedará registrada con un código de reserva. La confirmación final depende de la disponibilidad.</p><label for="reserva-fecha">Fecha estimada de viaje</label><input id="reserva-fecha" name="fechaViaje" type="date" required><label for="reserva-viajeros">Cantidad de viajeros</label><input id="reserva-viajeros" name="cantidadViajeros" type="number" min="1" max="20" value="1" required><label for="reserva-comentario">Comentario</label><textarea id="reserva-comentario" name="comentario" placeholder="Cuéntanos si tienes alguna solicitud especial."></textarea><button type="submit">Registrar reserva</button><p class="rt-status" id="estado-reserva" aria-live="polite"></p></form></div></dialog>
+  <script src="script-sesion.js"></script>
+  <script src="script-destinos.js"></script>
+</body>
+</html>

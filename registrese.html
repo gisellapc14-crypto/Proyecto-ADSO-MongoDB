@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear nueva cuenta - RallyTraver</title>
+    <link rel="stylesheet" href="style/stylesheet.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="access-page">
+
+    <header class="access-header">
+        <nav class="navbar access-navbar" aria-label="Navegación principal">
+            <div class="platform-menu">
+                <button class="platform-menu-toggle" id="menu-explorar" type="button" aria-expanded="false" aria-controls="opciones-explorar"><span aria-hidden="true">☰</span><span>Explorar</span></button>
+                <div class="platform-dropdown" id="opciones-explorar" hidden>
+                    <a href="paginaprincipal.html">Inicio</a>
+                    <a href="landingpage.html">Destinos</a>
+                    <a href="landingpage.html?categoria=internacional">Paquetes</a>
+                    <a href="landingpage.html?hoteles=true">Hoteles</a>
+                    <button class="platform-menu-placeholder" type="button" disabled>Vuelos</button>
+                    <a href="nosotros.html">Acerca de Nosotros</a>
+                    <a href="ayuda.html">Centro de Ayuda</a>
+                    <a href="index.html">Iniciar sesión</a>
+                </div>
+            </div>
+            <ul class="access-links">
+                <li><a href="paginaprincipal.html">Inicio</a></li>
+                <li><a href="nosotros.html">Acerca de Nosotros</a></li>
+                <li><a href="ayuda.html">Centro de Ayuda</a></li>
+            </ul>
+            <img src="Images/logo.png" alt="Logo RallyTraver" class="mini-logo access-logo">
+        </nav>
+    </header>
+
+    <section class="registro-container">
+        <img src="images/avion1.png" alt="Avión decorativo izquierdo" class="avion avion-izquierda">
+        <img src="images/avion2.png" alt="Avión decorativo derecho" class="avion avion-derecha">
+
+        <div class="registro-box">
+            <h1>Crear Nueva Cuenta</h1>
+            <p>¿Ya estás registrado? <a href="index.html">Inicia sesión aquí.</a></p>
+
+            <form id="form-registro" novalidate>
+                <label for="nombre">Nombre Completo</label>
+                <input type="text" id="nombre" placeholder="Nombre completo" autocomplete="name" required minlength="3">
+
+                <label for="correo">Correo Electrónico</label>
+                <input type="email" id="correo" placeholder="Correo electrónico" autocomplete="email" required>
+
+                 <label for="password">CONTRASEÑA</label>
+                <div class="password-container">
+                    <input type="password" id="password" placeholder=" " autocomplete="new-password" required minlength="6">
+                    <button class="ver password-toggle" type="button" aria-label="Mostrar contraseña">👁️</button>
+                </div>
+                <label for="fecha">Fecha de Nacimiento</label>
+                <div class="fecha-nacimiento">
+                    <select id="dia" required>
+                        <option value="">Día</option>
+                        <!-- Días del 1 al 31 -->
+                        <script>
+                            for (let i = 1; i <= 31; i++) {
+                                document.write(`<option value="${i}">${i}</option>`);
+                            }
+                        </script>
+                    </select>
+
+                    <select id="mes" required>
+                        <option value="">Mes</option>
+                        <option>Enero</option>
+                        <option>Febrero</option>
+                        <option>Marzo</option>
+                        <option>Abril</option>
+                        <option>Mayo</option>
+                        <option>Junio</option>
+                        <option>Julio</option>
+                        <option>Agosto</option>
+                        <option>Septiembre</option>
+                        <option>Octubre</option>
+                        <option>Noviembre</option>
+                        <option>Diciembre</option>
+                    </select>
+
+                    <select id="anio" required>
+                        <option value="">Año</option>
+                        <script>
+                            const anioActual = new Date().getFullYear();
+                            for (let i = anioActual; i >= 1950; i--) {
+                                document.write(`<option value="${i}">${i}</option>`);
+                            }
+                        </script>
+                    </select>
+                </div>
+
+                <label for="celular">Número de Celular</label>
+                <div class="celular-input">
+                    <select id="codigo">
+                        <option value="+57">🇨🇴 +57</option>
+                        <option value="+1">🇺🇸 +1</option>
+                        <option value="+34">🇪🇸 +34</option>
+                        <option value="+52">🇲🇽 +52</option>
+                        <option value="+54">🇦🇷 +54</option>
+                        <option value="+51">🇵🇪 +51</option>
+                    </select>
+                    <input type="tel" id="celular" placeholder="Número de celular" inputmode="tel" pattern="[0-9 -]{7,15}" required>
+                </div>
+
+                <div class="checkbox">
+                    <input type="checkbox" id="terminos" required>
+                    <label for="terminos">Acepto los <a href="terminos.html">Términos y condiciones</a> y la <a href="privacidad.html">Política de privacidad</a></label>
+                </div>
+
+                <button type="submit" class="btn-registrarse">Registrarse</button>
+                <p class="form-status" id="estado-registro" aria-live="polite"></p>
+            </form>
+        </div>
+    </section>
+    <script src="script-registro.js"></script>
+</body>
+</html>

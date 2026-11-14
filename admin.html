@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Panel de administración de reservas de RallyTraver.">
+  <title>Administración | RallyTraver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style/stylesheet.css">
+</head>
+<body class="rt-site" data-page="admin">
+  <header class="rt-header">
+    <a class="rt-brand" href="paginaprincipal.html" aria-label="Inicio RallyTraver"><img src="Images/logo.png" alt="Logo RallyTraver"><span>RallyTraver</span></a>
+    <button class="rt-menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false">☰</button>
+    <nav class="rt-nav" aria-label="Navegación principal"><a href="paginaprincipal.html">Inicio</a><a href="landingpage.html">Destinos</a><a href="mis-reservas.html">Mis reservas</a><a class="rt-login" href="index.html">Iniciar sesión</a></nav>
+  </header>
+  <main>
+    <section class="rt-catalog-hero rt-account-hero"><p class="rt-eyebrow">RALLYTRAVER</p><h1>Administración de reservas</h1><p>Consulta clientes, actualiza el estado de cada reserva y descarga el reporte en Excel.</p></section>
+    <section class="rt-section rt-section-alt">
+      <div class="rt-admin-top"><div><h2>Resumen</h2><p id="admin-mensaje" aria-live="polite"></p></div><button class="rt-primary" id="exportar-reservas" type="button">Exportar a Excel</button></div>
+      <div class="rt-admin-stats" id="admin-resumen"></div>
+      <form class="rt-admin-filters" id="form-filtros-admin"><div class="rt-field"><label for="admin-buscar">Buscar</label><input id="admin-buscar" name="buscar" placeholder="Código, cliente, correo o destino"></div><div class="rt-field"><label for="admin-estado">Estado</label><select id="admin-estado" name="estado"><option value="">Todos los estados</option><option>Pendiente de confirmación</option><option>Confirmada</option><option>Cancelada</option></select></div><button class="rt-secondary" type="submit">Aplicar filtros</button></form>
+      <div class="rt-admin-table-wrap"><table class="rt-admin-table"><thead><tr><th>Código</th><th>Cliente</th><th>Destino</th><th>Viaje</th><th>Viajeros</th><th>Estado</th><th>Registro</th></tr></thead><tbody id="tabla-reservas"><tr><td colspan="7">Cargando reservas...</td></tr></tbody></table></div>
+    </section>
+  </main>
+  <script src="script-sesion.js"></script>
+  <script src="script-reservas.js"></script>
+</body>
+</html>

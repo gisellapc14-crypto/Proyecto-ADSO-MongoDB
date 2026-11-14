@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Catálogo de destinos, paquetes, hoteles y pasadías de RallyTraver.">
+  <title>Destinos | RallyTraver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style/stylesheet.css">
+</head>
+<body class="rt-site" data-page="catalogo">
+  <header class="rt-header">
+    <a class="rt-brand" href="paginaprincipal.html" aria-label="Inicio RallyTraver"><img src="Images/logo.png" alt="Logo RallyTraver"><span>RallyTraver</span></a>
+    <button class="rt-menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false">☰</button>
+    <nav class="rt-nav" aria-label="Navegación principal">
+            <a href="paginaprincipal.html">Inicio</a><a href="landingpage.html">Destinos</a><a href="landingpage.html?categoria=internacional">Paquetes</a><a href="landingpage.html?hoteles=true">Hoteles</a><a href="nosotros.html">Acerca de nosotros</a><a href="ayuda.html">Centro de ayuda</a><a class="rt-login" href="index.html">Iniciar sesión</a>
+    </nav>
+  </header>
+  <main>
+    <section class="rt-catalog-hero"><p class="rt-eyebrow">EXPERIENCIAS RALLYTRAVER</p><h1>Encuentra el viaje que va contigo</h1><p>Busca por destino, tipo de viaje o presupuesto. En cada experiencia podrás consultar duración, modalidad, hoteles sugeridos, salidas, itinerario y tarifas referenciales.</p></section>
+    <form class="rt-filters" id="form-filtros">
+      <div class="rt-field"><label for="buscar">Buscar</label><input id="buscar" placeholder="Ej. Cartagena, Grecia, playa..."></div>
+      <div class="rt-field"><label for="filtro-categoria">Tipo de destino</label><select id="filtro-categoria"><option value="">Todos</option><option value="nacional">Nacionales</option><option value="internacional">Internacionales</option><option value="pasadia">Pasadías</option></select></div>
+      <div class="rt-field"><label for="filtro-precio">Presupuesto</label><select id="filtro-precio"><option value="">Cualquier precio</option><option value="500000">Hasta COP $500.000</option><option value="1000000">Hasta COP $1.000.000</option><option value="3000000">Hasta COP $3.000.000</option></select></div>
+      <button class="rt-primary" type="submit">Aplicar filtros</button>
+    </form>
+    <section class="rt-section"><div class="rt-section-heading"><div><h2>Todos los destinos</h2><p id="resultado-catalogo" aria-live="polite">Cargando catálogo...</p></div><a class="rt-secondary" href="paginaprincipal.html#inicio">Cotizar otro viaje</a></div><div id="catalogo-destinos" class="rt-destinos-grid" aria-live="polite"></div></section>
+  </main>
+  <footer class="rt-footer"><div><div class="rt-footer-brand"><img src="Images/logo.png" alt=""><span>RallyTraver</span></div><p>Tu próxima experiencia empieza con una buena elección.</p></div><div><h3>Explora</h3><ul><li><a href="landingpage.html">Todos los destinos</a></li><li><a href="landingpage.html?categoria=nacional">Nacionales</a></li><li><a href="landingpage.html?categoria=internacional">Internacionales</a></li><li><a href="landingpage.html?categoria=pasadia">Pasadías</a></li></ul></div><div><h3>Contacto</h3><ul><li><a href="https://wa.me/573163110229" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="nosotros.html">Acerca de nosotros</a></li><li><a href="ayuda.html">Centro de ayuda</a></li></ul></div><div class="rt-copy">© 2026 RallyTraver · Agencia de viajes.</div></footer>
+  <a class="rt-whatsapp" href="https://wa.me/573163110229" target="_blank" rel="noopener" aria-label="Escribir a RallyTraver por WhatsApp">◉ WhatsApp</a>
+  <dialog class="rt-modal" id="modal-destino"><div class="rt-modal-content"><button class="rt-modal-close" type="button" aria-label="Cerrar">×</button><div id="detalle-destino"></div></div></dialog>
+  <dialog class="rt-modal" id="modal-solicitud"><div class="rt-modal-content"><button class="rt-modal-close" type="button" aria-label="Cerrar">×</button><form class="rt-form" id="form-solicitud"><h2 id="solicitud-titulo">Solicitar cotización</h2><input type="hidden" id="solicitud-tipo" name="tipo"><label for="solicitud-nombre">Nombre</label><input id="solicitud-nombre" name="nombre" autocomplete="name" required><label for="solicitud-email">Correo electrónico</label><input id="solicitud-email" name="email" type="email" autocomplete="email" required><label for="solicitud-mensaje">Cuéntanos lo que necesitas</label><textarea id="solicitud-mensaje" name="mensaje" required></textarea><button type="submit">Enviar solicitud</button><p class="rt-status" aria-live="polite"></p></form></div></dialog>
+  <dialog class="rt-modal" id="modal-reserva"><div class="rt-modal-content"><button class="rt-modal-close" type="button" aria-label="Cerrar">×</button><form class="rt-form" id="form-reserva"><h2>Confirmar reserva</h2><input type="hidden" id="reserva-destino-id" name="destinoId"><p class="rt-reserva-destino" id="reserva-destino-nombre"></p><p class="rt-reserva-note">Tu solicitud quedará registrada con un código de reserva. La confirmación final depende de la disponibilidad.</p><label for="reserva-fecha">Fecha estimada de viaje</label><input id="reserva-fecha" name="fechaViaje" type="date" required><label for="reserva-viajeros">Cantidad de viajeros</label><input id="reserva-viajeros" name="cantidadViajeros" type="number" min="1" max="20" value="1" required><label for="reserva-comentario">Comentario</label><textarea id="reserva-comentario" name="comentario" placeholder="Cuéntanos si tienes alguna solicitud especial."></textarea><button type="submit">Registrar reserva</button><p class="rt-status" id="estado-reserva" aria-live="polite"></p></form></div></dialog>
+  <script src="script-sesion.js"></script>
+  <script src="script-destinos.js"></script>
+</body>
+</html>

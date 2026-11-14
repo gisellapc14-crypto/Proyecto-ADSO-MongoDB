@@ -1,0 +1,171 @@
+const API_RESERVAS_CLIENTE = 'http://localhost:8080/api/reservas';
+const estadosReserva = ['Pendiente de confirmación', 'Confirmada', 'Cancelada'];
+const formatoCOPReservas = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
+
+function escaparHTML(valor) {
+  return String(valor || '').replace(/[&<>'"]/g, (caracter) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[caracter]);
+}
+
+function fechaCorta(valor) {
+  if (!valor) return 'Por confirmar';
+  const fecha = new Date(valor);
+  return Number.isNaN(fecha.getTime()) ? 'Por confirmar' : fecha.toLocaleDateString('es-CO', { timeZone: 'UTC', year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function encabezadosAutenticados() {
+  const sesion = obtenerSesionRallyTraver();
+  return { Authorization: 'Bearer ' + sesion.token };
+}
+
+function validarSesion(requiereAdmin = false) {
+  const sesion = obtenerSesionRallyTraver();
+  if (!sesion) {
+    enviarAInicioSesion();
+    return null;
+  }
+  if (requiereAdmin && sesion.usuario.role !== 'admin') {
+    window.location.href = 'paginaprincipal.html';
+    return null;
+  }
+  return sesion;
+}
+
+async function respuestaSegura(respuesta) {
+  const datos = await respuesta.json().catch(() => ({}));
+  if (respuesta.status === 401) {
+    localStorage.removeItem('rallytraverToken');
+    localStorage.removeItem('rallytraverUsuario');
+    enviarAInicioSesion();
+    throw new Error('Tu sesión venció. Inicia sesión nuevamente.');
+  }
+  if (!respuesta.ok) throw new Error(datos.error || 'No se pudo completar la solicitud.');
+  return datos;
+}
+
+function tarjetaReserva(reserva) {
+  const estadoClase = reserva.estado === 'Confirmada' ? 'is-confirmed' : reserva.estado === 'Cancelada' ? 'is-cancelled' : 'is-pending';
+  return '<article class="rt-reservation-card"><div class="rt-reservation-card-top"><span class="rt-reservation-code">' + escaparHTML(reserva.codigo) + '</span><span class="rt-reservation-status ' + estadoClase + '">' + escaparHTML(reserva.estado) + '</span></div><h2>' + escaparHTML(reserva.destinoNombre) + '</h2><dl><div><dt>Fecha estimada</dt><dd>' + fechaCorta(reserva.fechaViaje) + '</dd></div><div><dt>Viajeros</dt><dd>' + escaparHTML(reserva.cantidadViajeros) + '</dd></div><div><dt>Precio referencial</dt><dd>' + formatoCOPReservas.format(reserva.precioReferencial || 0) + '</dd></div><div><dt>Registrada</dt><dd>' + fechaCorta(reserva.createdAt) + '</dd></div></dl>' + (reserva.comentario ? '<p class="rt-reservation-comment">' + escaparHTML(reserva.comentario) + '</p>' : '') + '</article>';
+}
+
+async function cargarMisReservas() {
+  const sesion = validarSesion();
+  const contenedor = document.getElementById('lista-mis-reservas');
+  if (!sesion || !contenedor) return;
+  const saludo = document.getElementById('saludo-reservas');
+  if (saludo) saludo.textContent = sesion.usuario.name + ', consulta el estado y los detalles de las experiencias que registraste.';
+
+  try {
+    const respuesta = await fetch(API_RESERVAS_CLIENTE + '/mis-reservas', { headers: encabezadosAutenticados() });
+    const reservas = await respuestaSegura(respuesta);
+    contenedor.innerHTML = reservas.length ? reservas.map(tarjetaReserva).join('') : '<div class="rt-empty"><h2>Aún no tienes reservas registradas.</h2><p>Explora las experiencias disponibles y registra tu próxima aventura.</p><a class="rt-primary" href="landingpage.html">Explorar destinos</a></div>';
+  } catch (error) {
+    contenedor.innerHTML = '<p class="rt-empty">' + escaparHTML(error.message) + '</p>';
+  }
+}
+
+function opcionesEstado(estadoActual) {
+  return estadosReserva.map((estado) => '<option value="' + escaparHTML(estado) + '"' + (estado === estadoActual ? ' selected' : '') + '>' + escaparHTML(estado) + '</option>').join('');
+}
+
+function renderizarTablaAdmin(reservas) {
+  const tabla = document.getElementById('tabla-reservas');
+  if (!tabla) return;
+  if (!reservas.length) {
+    tabla.innerHTML = '<tr><td colspan="7">No hay reservas que coincidan con los filtros.</td></tr>';
+    return;
+  }
+  tabla.innerHTML = reservas.map((reserva) => '<tr><td><strong>' + escaparHTML(reserva.codigo) + '</strong></td><td>' + escaparHTML(reserva.nombreCliente) + '<small>' + escaparHTML(reserva.emailCliente) + '</small><small>' + escaparHTML(reserva.telefonoCliente || 'Sin teléfono') + '</small></td><td>' + escaparHTML(reserva.destinoNombre) + '<small>' + formatoCOPReservas.format(reserva.precioReferencial || 0) + '</small></td><td>' + fechaCorta(reserva.fechaViaje) + '</td><td>' + escaparHTML(reserva.cantidadViajeros) + '</td><td><select data-estado-reserva="' + reserva._id + '">' + opcionesEstado(reserva.estado) + '</select></td><td>' + fechaCorta(reserva.createdAt) + '</td></tr>').join('');
+  tabla.querySelectorAll('[data-estado-reserva]').forEach((selector) => selector.addEventListener('change', () => actualizarEstadoReserva(selector)));
+}
+
+async function cargarResumenAdmin() {
+  const respuesta = await fetch(API_RESERVAS_CLIENTE + '/resumen', { headers: encabezadosAutenticados() });
+  const resumen = await respuestaSegura(respuesta);
+  const contenedor = document.getElementById('admin-resumen');
+  if (!contenedor) return;
+  contenedor.innerHTML = '<article><span>Total</span><strong>' + resumen.total + '</strong></article><article><span>Pendientes</span><strong>' + resumen['Pendiente de confirmación'] + '</strong></article><article><span>Confirmadas</span><strong>' + resumen.Confirmada + '</strong></article><article><span>Canceladas</span><strong>' + resumen.Cancelada + '</strong></article>';
+}
+
+async function cargarReservasAdmin() {
+  if (!validarSesion(true)) return;
+  const mensaje = document.getElementById('admin-mensaje');
+  const buscar = document.getElementById('admin-buscar')?.value.trim() || '';
+  const estado = document.getElementById('admin-estado')?.value || '';
+  const parametros = new URLSearchParams();
+  if (buscar) parametros.set('buscar', buscar);
+  if (estado) parametros.set('estado', estado);
+  try {
+    const [respuestaReservas] = await Promise.all([
+      fetch(API_RESERVAS_CLIENTE + (parametros.toString() ? '?' + parametros.toString() : ''), { headers: encabezadosAutenticados() }),
+      cargarResumenAdmin()
+    ]);
+    const reservas = await respuestaSegura(respuestaReservas);
+    renderizarTablaAdmin(reservas);
+    if (mensaje) mensaje.textContent = reservas.length + ' reserva' + (reservas.length === 1 ? '' : 's') + ' encontrada' + (reservas.length === 1 ? '' : 's') + '.';
+  } catch (error) {
+    if (mensaje) mensaje.textContent = error.message;
+    const tabla = document.getElementById('tabla-reservas');
+    if (tabla) tabla.innerHTML = '<tr><td colspan="7">No se pudieron cargar las reservas.</td></tr>';
+  }
+}
+
+async function actualizarEstadoReserva(selector) {
+  const mensaje = document.getElementById('admin-mensaje');
+  selector.disabled = true;
+  try {
+    const respuesta = await fetch(API_RESERVAS_CLIENTE + '/' + selector.dataset.estadoReserva + '/estado', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', ...encabezadosAutenticados() },
+      body: JSON.stringify({ estado: selector.value })
+    });
+    await respuestaSegura(respuesta);
+    if (mensaje) mensaje.textContent = 'Estado actualizado correctamente.';
+    await cargarResumenAdmin();
+  } catch (error) {
+    if (mensaje) mensaje.textContent = error.message;
+    await cargarReservasAdmin();
+  } finally {
+    selector.disabled = false;
+  }
+}
+
+async function exportarReservasExcel() {
+  const boton = document.getElementById('exportar-reservas');
+  const mensaje = document.getElementById('admin-mensaje');
+  boton.disabled = true;
+  if (mensaje) mensaje.textContent = 'Generando archivo de Excel...';
+  try {
+    const respuesta = await fetch(API_RESERVAS_CLIENTE + '/exportar/excel', { headers: encabezadosAutenticados() });
+    if (!respuesta.ok) {
+      const datos = await respuesta.json().catch(() => ({}));
+      throw new Error(datos.error || 'No se pudo generar el archivo.');
+    }
+    const archivo = await respuesta.blob();
+    const enlace = document.createElement('a');
+    enlace.href = URL.createObjectURL(archivo);
+    enlace.download = 'reservas-rallytraver.xlsx';
+    enlace.click();
+    URL.revokeObjectURL(enlace.href);
+    if (mensaje) mensaje.textContent = 'El archivo de reservas se descargó correctamente.';
+  } catch (error) {
+    if (mensaje) mensaje.textContent = error.message;
+  } finally {
+    boton.disabled = false;
+  }
+}
+
+function configurarPanelAdmin() {
+  if (!validarSesion(true)) return;
+  document.getElementById('form-filtros-admin')?.addEventListener('submit', (evento) => {
+    evento.preventDefault();
+    cargarReservasAdmin();
+  });
+  document.getElementById('exportar-reservas')?.addEventListener('click', exportarReservasExcel);
+  cargarReservasAdmin();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const pagina = document.body.dataset.page;
+  if (pagina === 'mis-reservas') cargarMisReservas();
+  if (pagina === 'admin') configurarPanelAdmin();
+});
