@@ -20,20 +20,52 @@
       <a href="paginaprincipal.html">Inicio</a>
       <a href="landingpage.html">Destinos</a>
       <a href="landingpage.html?categoria=internacional">Paquetes</a>
-      <a href="landingpage.html?hoteles=true">Hoteles</a>
+      <a href="hoteles.html">Hoteles</a>
       <a href="nosotros.html">Acerca de nosotros</a><a href="ayuda.html">Centro de ayuda</a>
       <a class="rt-login" href="index.html">Iniciar sesión</a>
     </nav>
   </header>
 
   <main>
-    <section class="rt-hero" id="inicio">
-      <div class="rt-hero-content">
-        <span class="rt-eyebrow">VUELOS · PAQUETES · HOTELES</span>
-        <h1>El viaje que imaginas empieza aquí.</h1>
-        <p>Explora Colombia y el mundo con experiencias diseñadas para viajar a tu manera.</p>
-        <a class="rt-primary" href="landingpage.html">Explorar destinos</a>
+    <section class="rt-hero rt-hero-carousel" id="inicio" aria-label="Experiencias destacadas de RallyTraver">
+      <div class="rt-carousel-track">
+        <article class="rt-hero-slide rt-slide-inicio is-active" aria-hidden="false">
+          <div class="rt-hero-content">
+            <span class="rt-eyebrow">VUELOS · PAQUETES · HOTELES</span>
+            <h1>El viaje que imaginas empieza aquí.</h1>
+            <p>Explora Colombia y el mundo con experiencias diseñadas para viajar a tu manera.</p>
+            <a class="rt-primary" href="landingpage.html">Explorar destinos</a>
+          </div>
+        </article>
+        <article class="rt-hero-slide rt-slide-paquetes" aria-hidden="true">
+          <p class="rt-visually-hidden">Paquetes para desconectarte en destinos de playa.</p>
+          <a class="rt-primary rt-hero-slide-action" href="landingpage.html?paquetes=true">Ver paquetes</a>
+        </article>
+        <article class="rt-hero-slide rt-slide-vuelos" aria-hidden="true">
+          <p class="rt-visually-hidden">Vuela a tu próxima historia con RallyTraver.</p>
+          <a class="rt-primary rt-hero-slide-action" href="vuelos.html">Solicitar vuelo</a>
+        </article>
+        <article class="rt-hero-slide rt-slide-hoteles" aria-hidden="true">
+          <p class="rt-visually-hidden">Encuentra el hotel ideal para tu viaje.</p>
+          <a class="rt-primary rt-hero-slide-action" href="hoteles.html">Explorar hoteles</a>
+        </article>
+        <article class="rt-hero-slide rt-slide-colombia" aria-hidden="true">
+          <p class="rt-visually-hidden">Colombia te espera con experiencias nacionales.</p>
+          <a class="rt-primary rt-hero-slide-action" href="landingpage.html?categoria=nacional">Ver destinos</a>
+        </article>
       </div>
+      <div class="rt-carousel-controls" aria-label="Controles del carrusel">
+        <button type="button" data-carousel-prev aria-label="Ver imagen anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></button>
+        <button type="button" data-carousel-next aria-label="Ver imagen siguiente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+      </div>
+      <div class="rt-carousel-dots" role="tablist" aria-label="Seleccionar imagen destacada">
+        <button type="button" class="is-active" data-carousel-dot="0" aria-label="Ver diapositiva 1" aria-current="true"></button>
+        <button type="button" data-carousel-dot="1" aria-label="Ver diapositiva 2"></button>
+        <button type="button" data-carousel-dot="2" aria-label="Ver diapositiva 3"></button>
+        <button type="button" data-carousel-dot="3" aria-label="Ver diapositiva 4"></button>
+        <button type="button" data-carousel-dot="4" aria-label="Ver diapositiva 5"></button>
+      </div>
+      <button class="rt-carousel-pause" type="button" data-carousel-pause aria-pressed="false" aria-label="Pausar carrusel" title="Pausar carrusel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5.5h3.2v13H7zm6.8 0H17v13h-3.2z"/></svg><span class="rt-visually-hidden">Pausar carrusel</span></button>
     </section>
 
     <section class="rt-search-box" aria-label="Cotizador rápido">
@@ -52,10 +84,10 @@
     <section class="rt-section">
       <div class="rt-section-heading"><div><h2>Todo para vivir tu próximo viaje</h2><p>Planea con claridad: encuentra vuelos, paquetes, estadías y asistencia para cada etapa.</p></div></div>
       <div class="rt-grid">
-        <article class="rt-service"><div class="rt-service-icon">✈</div><h3>Vuelos</h3><p>Opciones de ruta y horario para que solicites una cotización a tu medida.</p></article>
-        <article class="rt-service"><div class="rt-service-icon">▣</div><h3>Paquetes</h3><p>Experiencias organizadas con destinos, alojamiento y planes para explorar.</p></article>
-        <article class="rt-service"><div class="rt-service-icon">⌂</div><h3>Hoteles</h3><p>Alojamientos sugeridos en destinos nacionales e internacionales.</p></article>
-        <article class="rt-service"><div class="rt-service-icon">♥</div><h3>Favoritos</h3><p>Guarda las experiencias que te gusten para revisarlas cuando quieras.</p></article>
+        <a class="rt-service rt-service-link" href="vuelos.html"><div class="rt-service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2.5 13.2h7.3l5.6 7.1h2.2l-2.5-7.1H21a1.5 1.5 0 0 0 0-3H15l2.5-7.1h-2.2L9.8 10.2H2.5v3Z"/></svg></div><h3>Vuelos</h3><p>Opciones de ruta y horario para que solicites una cotización a tu medida.</p><span>Explorar vuelos →</span></a>
+        <a class="rt-service rt-service-link" href="landingpage.html?paquetes=true"><div class="rt-service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2M4 7h16v12H4zM4 12h16M10 12v2h4v-2"/></svg></div><h3>Paquetes</h3><p>Experiencias organizadas con destinos, alojamiento y planes para explorar.</p><span>Ver paquetes →</span></a>
+        <a class="rt-service rt-service-link" href="hoteles.html"><div class="rt-service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 21V4h11v17M15 9h5v12M8 8h3m-3 4h3m-3 4h3m6-3h1m-1 4h1M2 21h20"/></svg></div><h3>Hoteles</h3><p>Alojamientos sugeridos en destinos nacionales e internacionales.</p><span>Explorar hoteles →</span></a>
+        <a class="rt-service rt-service-link" href="favoritos.html"><div class="rt-service-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.8 4.9a5.4 5.4 0 0 0-7.7 0L12 6l-1.1-1.1a5.4 5.4 0 0 0-7.7 7.7L12 21l8.8-8.4a5.4 5.4 0 0 0 0-7.7Z"/></svg></div><h3>Favoritos</h3><p>Guarda las experiencias que te gusten para revisarlas cuando quieras.</p><span>Ver mis favoritos →</span></a>
       </div>
     </section>
 
@@ -72,7 +104,7 @@
       <div class="rt-benefits"><div class="rt-benefit"><strong>Destinos seleccionados</strong><span>Información organizada de viajes nacionales e internacionales.</span></div><div class="rt-benefit"><strong>Cotización personalizada</strong><span>Cuéntanos tus fechas e intereses para responderte con una opción.</span></div><div class="rt-benefit"><strong>Atención cercana</strong><span>Seguimiento a tu solicitud por el equipo de RallyTraver.</span></div></div>
     </section>
 
-    <section class="rt-section" id="ayuda"><div class="rt-faq"><h2>Centro de ayuda</h2><details><summary>¿Cómo solicito una cotización?</summary><p>Selecciona la opción que te interesa, completa el formulario y registraremos tu solicitud para contactarte.</p></details><details><summary>¿Los precios son definitivos?</summary><p>Los valores publicados son precios desde y pueden variar según fecha, disponibilidad y número de viajeros.</p></details><details><summary>¿Puedo guardar una experiencia?</summary><p>Sí. Usa el ícono de corazón en cada tarjeta; se guardará en este navegador para que la encuentres fácilmente.</p></details></div></section>
+    <section class="rt-section" id="ayuda"><div class="rt-faq"><h2>Centro de ayuda</h2><details><summary>¿Cómo solicito una cotización?</summary><p>Selecciona la opción que te interesa, completa el formulario y registraremos tu solicitud para contactarte.</p></details><details><summary>¿Los precios son definitivos?</summary><p>Los valores publicados son precios desde y pueden variar según fecha, disponibilidad y número de viajeros.</p></details><details><summary>¿Puedo guardar una experiencia?</summary><p>Sí. Inicia sesión y usa el ícono de corazón en destinos, paquetes, hoteles o vuelos. Podrás verlos después en Mis favoritos.</p></details></div></section>
   </main>
 
   <footer class="rt-footer">
@@ -88,6 +120,8 @@
   <dialog class="rt-modal" id="modal-solicitud"><div class="rt-modal-content"><button class="rt-modal-close" type="button" aria-label="Cerrar">×</button><form class="rt-form" id="form-solicitud"><h2 id="solicitud-titulo">Solicitar cotización</h2><input type="hidden" id="solicitud-tipo" name="tipo"><label for="solicitud-nombre">Nombre</label><input id="solicitud-nombre" name="nombre" autocomplete="name" required><label for="solicitud-email">Correo electrónico</label><input id="solicitud-email" name="email" type="email" autocomplete="email" required><label for="solicitud-mensaje">Cuéntanos lo que necesitas</label><textarea id="solicitud-mensaje" name="mensaje" required></textarea><button type="submit">Enviar solicitud</button><p class="rt-status" aria-live="polite"></p></form></div></dialog>
   <dialog class="rt-modal" id="modal-reserva"><div class="rt-modal-content"><button class="rt-modal-close" type="button" aria-label="Cerrar">×</button><form class="rt-form" id="form-reserva"><h2>Confirmar reserva</h2><input type="hidden" id="reserva-destino-id" name="destinoId"><p class="rt-reserva-destino" id="reserva-destino-nombre"></p><p class="rt-reserva-note">Tu solicitud quedará registrada con un código de reserva. La confirmación final depende de la disponibilidad.</p><label for="reserva-fecha">Fecha estimada de viaje</label><input id="reserva-fecha" name="fechaViaje" type="date" required><label for="reserva-viajeros">Cantidad de viajeros</label><input id="reserva-viajeros" name="cantidadViajeros" type="number" min="1" max="20" value="1" required><label for="reserva-comentario">Comentario</label><textarea id="reserva-comentario" name="comentario" placeholder="Cuéntanos si tienes alguna solicitud especial."></textarea><button type="submit">Registrar reserva</button><p class="rt-status" id="estado-reserva" aria-live="polite"></p></form></div></dialog>
   <script src="script-sesion.js"></script>
+  <script src="script-favoritos.js"></script>
+  <script src="script-carrusel.js"></script>
   <script src="script-destinos.js"></script>
 </body>
 </html>

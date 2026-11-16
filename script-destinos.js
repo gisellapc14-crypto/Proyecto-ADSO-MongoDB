@@ -71,18 +71,13 @@ function itinerarioDestino(destino) {
 }
 
 function favoritos() {
-  try { return JSON.parse(localStorage.getItem('rallytraverFavoritos') || '[]'); } catch { return []; }
+  if (typeof obtenerFavoritosRallyTraver !== 'function') return [];
+  return obtenerFavoritosRallyTraver().filter((favorito) => favorito.tipo === 'destino').map((favorito) => String(favorito.elemento?._id || favorito.elemento));
 }
 
-function guardarFavoritos(lista) {
-  localStorage.setItem('rallytraverFavoritos', JSON.stringify(lista));
-}
-
-function alternarFavorito(id) {
-  const lista = favoritos();
-  const indice = lista.indexOf(id);
-  if (indice === -1) lista.push(id); else lista.splice(indice, 1);
-  guardarFavoritos(lista);
+async function alternarFavorito(id) {
+  if (typeof alternarFavoritoRallyTraver !== 'function') return;
+  await alternarFavoritoRallyTraver('destino', id);
   renderizarPaginaActual();
 }
 
@@ -210,7 +205,7 @@ function configurarFormularioSolicitud() {
       const respuesta = await fetch(API_CONTACTOS, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre: datos.get('nombre'), email: datos.get('email'), mensaje: datos.get('mensaje'), tipo: tipoSolicitud === 'reserva' ? 'reserva' : 'contacto' }) });
       const resultado = await respuesta.json();
       if (!respuesta.ok) throw new Error(resultado.error || 'No se pudo enviar la solicitud.');
-      estado.textContent = 'Tu solicitud fue enviada correctamente. Te contactaremos pronto.';
+      estado.textContent = 'Recibimos tu solicitud correctamente. Nuestro equipo te responderá al correo registrado.';
       formulario.reset();
     } catch (error) {
       estado.textContent = error.message || 'No se pudo enviar la solicitud. Intenta nuevamente.';
@@ -256,7 +251,7 @@ function configurarFormularioReserva() {
       const resultado = await respuesta.json().catch(() => ({}));
       if (!respuesta.ok) throw new Error(resultado.error || 'No se pudo registrar la reserva.');
 
-      estado.innerHTML = 'Reserva registrada exitosamente. Código: <strong>' + textoSeguro(resultado.reserva.codigo) + '</strong>. Estado: ' + textoSeguro(resultado.reserva.estado) + '. <a href="mis-reservas.html">Ver mis reservas</a>';
+      estado.innerHTML = '¡Reserva registrada! Tu código es <strong>' + textoSeguro(resultado.reserva.codigo) + '</strong>. Quedó <strong>' + textoSeguro(resultado.reserva.estado) + '</strong> mientras confirmamos disponibilidad. <a href="mis-reservas.html">Ver mis reservas</a>';
       formulario.querySelectorAll('input:not([type="hidden"]), textarea').forEach((campo) => { if (campo.type !== 'number') campo.value = ''; });
       document.getElementById('reserva-viajeros').value = 1;
     } catch (error) {
@@ -273,9 +268,10 @@ function filtrarCatalogo() {
   const categoria = document.getElementById('filtro-categoria')?.value || '';
   const maximo = Number(document.getElementById('filtro-precio')?.value || 0);
   const soloHoteles = new URLSearchParams(window.location.search).get('hoteles') === 'true';
+  const soloPaquetes = new URLSearchParams(window.location.search).get('paquetes') === 'true';
   const lista = destinos.filter((destino) => {
     const consulta = [destino.nombre, destino.descripcion, destino.ubicacion, destino.modalidad, destino.duracion, ...(destino.paises || []), ...(destino.ciudadesLugares || [])].filter(Boolean).join(' ').toLowerCase();
-    return destino.activo !== false && (!texto || consulta.includes(texto)) && (!categoria || destino.categoria === categoria) && (!maximo || destino.precio <= maximo) && (!soloHoteles || (destino.hoteles || []).length);
+    return destino.activo !== false && (!texto || consulta.includes(texto)) && (!categoria || destino.categoria === categoria) && (!maximo || destino.precio <= maximo) && (!soloHoteles || (destino.hoteles || []).length) && (!soloPaquetes || destino.paqueteDestacado === true);
   });
   renderizarTarjetas(document.getElementById('catalogo-destinos'), lista, 'No encontramos experiencias con esos filtros. Prueba una selección diferente.');
   const resultado = document.getElementById('resultado-catalogo');
@@ -285,7 +281,16 @@ function filtrarCatalogo() {
 function configurarCatalogo() {
   const parametros = new URLSearchParams(window.location.search);
   const categoria = parametros.get('categoria');
+  const paquetes = parametros.get('paquetes') === 'true';
   if (categoria && document.getElementById('filtro-categoria')) document.getElementById('filtro-categoria').value = categoria;
+  if (paquetes) {
+    document.title = 'Paquetes | RallyTraver';
+    document.querySelector('.rt-catalog-hero .rt-eyebrow').textContent = 'PAQUETES RALLYTRAVER';
+    document.querySelector('.rt-catalog-hero h1').textContent = 'Paquetes para vivir una experiencia completa';
+    document.querySelector('.rt-catalog-hero p').textContent = 'Encuentra opciones con alojamiento, traslados y experiencias seleccionadas. Las tarifas son referenciales y se confirman al solicitar la reserva.';
+    const tituloCatalogo = document.querySelector('.rt-section-heading h2');
+    if (tituloCatalogo) tituloCatalogo.textContent = 'Paquetes destacados';
+  }
   document.getElementById('form-filtros')?.addEventListener('submit', (evento) => { evento.preventDefault(); filtrarCatalogo(); });
   document.getElementById('buscar')?.addEventListener('input', filtrarCatalogo);
   document.getElementById('filtro-categoria')?.addEventListener('change', filtrarCatalogo);
@@ -299,6 +304,10 @@ function renderizarPaginaActual() {
 }
 
 async function iniciar() {
+  if (document.body.dataset.page === 'catalogo' && new URLSearchParams(window.location.search).get('hoteles') === 'true') {
+    window.location.replace('hoteles.html');
+    return;
+  }
   configurarMenu();
   configurarCotizador();
   configurarFormularioSolicitud();
@@ -320,3 +329,6 @@ async function iniciar() {
 }
 
 document.addEventListener('DOMContentLoaded', iniciar);
+document.addEventListener('rallytraverFavoritosActualizados', () => {
+  if (destinos.length) renderizarPaginaActual();
+});

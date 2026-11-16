@@ -60,7 +60,7 @@ router.post('/', autenticar, async (req, res) => {
     });
 
     res.status(201).json({
-      message: 'Tu reserva fue registrada exitosamente.',
+      message: 'Reserva registrada. La disponibilidad será confirmada por nuestro equipo.',
       reserva: { codigo: reserva.codigo, estado: reserva.estado, fechaViaje: reserva.fechaViaje, destino: reserva.destinoNombre }
     });
   } catch (error) {
@@ -166,7 +166,7 @@ router.patch('/:id/estado', autenticar, soloAdministrador, async (req, res) => {
     if (!estadosValidos.includes(estado)) return res.status(400).json({ error: 'El estado seleccionado no es válido.' });
     const reserva = await Reserva.findByIdAndUpdate(req.params.id, { estado }, { new: true, runValidators: true });
     if (!reserva) return res.status(404).json({ error: 'Reserva no encontrada.' });
-    res.json({ message: 'Estado de la reserva actualizado.', reserva });
+    res.json({ message: `La reserva ${reserva.codigo} fue actualizada a ${reserva.estado}.`, reserva });
   } catch (error) {
     res.status(400).json({ error: 'No se pudo actualizar la reserva.' });
   }

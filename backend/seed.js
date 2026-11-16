@@ -4,6 +4,10 @@ const mongoose = require('mongoose');
 const conectarDB = require('./config/db');
 const User = require('./models/user');
 const Destino = require('./models/Destino');
+const Hotel = require('./models/Hotel');
+const Vuelo = require('./models/Vuelo');
+const hotelesCatalogo = require('./data/hotelesCatalogo');
+const vuelosCatalogo = require('./data/vuelosCatalogo');
 
 const usuariosDePrueba = [
   { name: 'Ana Torres', email: 'ana.torres@rallytravel.test', password: 'Viaje2026', born: '15 Mayo 1998', phone: '+57 300 555 0101', role: 'admin' },
@@ -12,6 +16,7 @@ const usuariosDePrueba = [
 ];
 
 const asset = 'destinos/imagenes destinos/';
+const assetPaquetes = 'paquetes/';
 const notaPrecioReferencial = 'Precio referencial según el documento fuente. Confirmar disponibilidad y tarifa final antes de vender.';
 const destinosDePrueba = [
   {
@@ -194,28 +199,141 @@ const destinosDePrueba = [
   },
   {
     nombre: 'San Andrés',
-    descripcion: 'Descubre el mar de los siete colores, relájate bajo el sol caribeño y déjate llevar por el ritmo isleño. Recorre playas de arena blanca, explora Johnny Cay y disfruta los sabores y la calidez de San Andrés.',
-    precio: 870000,
+    descripcion: 'Disfruta un paraíso caribeño con el mar de siete colores, playas de arena blanca y una escapada para relajarte y descubrir la vida marina de San Andrés.',
+    precio: 1950000,
     notaPrecio: notaPrecioReferencial,
-    imagen: asset + 'san andres1.jpeg',
+    imagen: assetPaquetes + 'san-andres-mar-siete-colores.jpeg',
     ubicacion: 'San Andrés, Colombia',
     categoria: 'nacional',
     tipoViaje: 'paquete',
-    duracion: '5 días / 4 noches',
+    duracion: '4 días / 3 noches',
     paises: ['Colombia'],
     cantidadPaises: 1,
     ciudadesLugares: ['San Andrés'],
     cantidadCiudades: 1,
-    modalidad: 'Personalizado',
+    modalidad: 'Paquete turístico',
     grupoReferencia: '',
-    duracionDias: 5,
-    duracionNoches: 4,
+    duracionDias: 4,
+    duracionNoches: 3,
     salidas: 'Consultar fechas de salida disponibles.',
     itinerario: [],
     preciosTemporada: [],
-    hoteles: ['Hotel Casablanca San Andrés', 'Hotel Bahía Sardina', 'Hotel Sol Caribe San Andrés'],
-    galeria: [asset + 'san andres1.jpeg', asset + 'san andres2.jpeg', asset + 'sanandres4.jpg'],
-    incluye: [],
+    hoteles: [],
+    galeria: [assetPaquetes + 'san-andres-mar-siete-colores.jpeg', asset + 'san andres2.jpeg', asset + 'sanandres4.jpg'],
+    incluye: ['Tiquete aéreo PEI - ADZ con conexión si aplica', 'Alojamiento', 'Alimentación según el plan del hotel', 'Traslados aeropuerto - hotel - aeropuerto', 'Recorrido opcional por la bahía, Johnny Cay, Acuario y playas de Spratt Bight'],
+    paqueteDestacado: true,
+    destacado: true,
+    activo: true
+  },
+  {
+    nombre: 'Cartagena Historia y Caribe',
+    descripcion: 'Recorre la historia de la ciudad amurallada, su arquitectura colonial y el cálido ambiente caribeño en una experiencia con alojamiento y recorridos seleccionados.',
+    precio: 1650000,
+    notaPrecio: notaPrecioReferencial,
+    imagen: assetPaquetes + 'cartagena-historia-caribe.jpeg',
+    ubicacion: 'Cartagena, Bolívar, Colombia',
+    categoria: 'nacional',
+    tipoViaje: 'paquete',
+    duracion: '4 días / 3 noches',
+    paises: ['Colombia'],
+    cantidadPaises: 1,
+    ciudadesLugares: ['Cartagena'],
+    cantidadCiudades: 1,
+    modalidad: 'Paquete turístico',
+    grupoReferencia: '',
+    duracionDias: 4,
+    duracionNoches: 3,
+    salidas: 'Consultar fechas disponibles y tarifa final.',
+    itinerario: [],
+    preciosTemporada: [],
+    hoteles: [],
+    galeria: [assetPaquetes + 'cartagena-historia-caribe.jpeg'],
+    incluye: ['Tiquetes desde Pereira', 'Alojamiento en zona turística', 'Desayuno', 'Traslados', 'Recorrido panorámico por la ciudad amurallada', 'Opción adicional de Islas del Rosario sujeta a disponibilidad y costo adicional'],
+    paqueteDestacado: true,
+    destacado: true,
+    activo: true
+  },
+  {
+    nombre: 'Cancún Caribe mexicano',
+    descripcion: 'Vive unas vacaciones frente a las playas de arena blanca y aguas turquesas de Cancún, con alternativas para conocer la cultura maya y disfrutar de actividades opcionales.',
+    precio: 4500000,
+    notaPrecio: notaPrecioReferencial,
+    imagen: assetPaquetes + 'cancun-caribe-mexicano.jpeg',
+    ubicacion: 'Cancún, Quintana Roo, México',
+    categoria: 'internacional',
+    tipoViaje: 'paquete',
+    duracion: '6 días / 5 noches',
+    paises: ['México'],
+    cantidadPaises: 1,
+    ciudadesLugares: ['Cancún'],
+    cantidadCiudades: 1,
+    modalidad: 'Paquete turístico',
+    grupoReferencia: '',
+    duracionDias: 6,
+    duracionNoches: 5,
+    salidas: 'Consultar fechas disponibles y tarifa final.',
+    itinerario: [],
+    preciosTemporada: [],
+    hoteles: [],
+    galeria: [assetPaquetes + 'cancun-caribe-mexicano.jpeg'],
+    incluye: ['Vuelos desde PEI con conexión', 'Hotel en zona hotelera o resort', 'Alimentación según el establecimiento', 'Traslados', 'Tiempo libre para playas', 'Excursiones opcionales a Chichén Itzá o Isla Mujeres'],
+    paqueteDestacado: true,
+    destacado: true,
+    activo: true
+  },
+  {
+    nombre: 'Punta Cana Todo Incluido',
+    descripcion: 'Desconéctate en un resort frente a playas tropicales de Punta Cana, con comodidades todo incluido y tiempo para disfrutar del mar Caribe.',
+    precio: 4800000,
+    notaPrecio: notaPrecioReferencial,
+    imagen: assetPaquetes + 'punta-cana-todo-incluido.jpeg',
+    ubicacion: 'Punta Cana, República Dominicana',
+    categoria: 'internacional',
+    tipoViaje: 'paquete',
+    duracion: '5 días / 4 noches',
+    paises: ['República Dominicana'],
+    cantidadPaises: 1,
+    ciudadesLugares: ['Punta Cana'],
+    cantidadCiudades: 1,
+    modalidad: 'Paquete turístico',
+    grupoReferencia: '',
+    duracionDias: 5,
+    duracionNoches: 4,
+    salidas: 'Consultar fechas disponibles y tarifa final.',
+    itinerario: [],
+    preciosTemporada: [],
+    hoteles: [],
+    galeria: [assetPaquetes + 'punta-cana-todo-incluido.jpeg'],
+    incluye: ['Vuelos con conexión', 'Resort todo incluido según categoría', 'Comidas y bebidas según el plan del hotel', 'Traslados', 'Acceso a zonas comunes', 'Excursiones opcionales'],
+    paqueteDestacado: true,
+    destacado: true,
+    activo: true
+  },
+  {
+    nombre: 'Río de Janeiro y Búzios',
+    descripcion: 'Combina los paisajes y la energía de Río de Janeiro con la atmósfera playera y relajada de Búzios en una experiencia por Brasil.',
+    precio: 4200000,
+    notaPrecio: notaPrecioReferencial,
+    imagen: assetPaquetes + 'rio-buzios-brasil.jpeg',
+    ubicacion: 'Río de Janeiro y Búzios, Brasil',
+    categoria: 'internacional',
+    tipoViaje: 'paquete',
+    duracion: '6 días / 5 noches',
+    paises: ['Brasil'],
+    cantidadPaises: 1,
+    ciudadesLugares: ['Río de Janeiro', 'Búzios'],
+    cantidadCiudades: 2,
+    modalidad: 'Paquete turístico',
+    grupoReferencia: '',
+    duracionDias: 6,
+    duracionNoches: 5,
+    salidas: 'Consultar fechas disponibles y tarifa final.',
+    itinerario: [{ lugar: 'Río de Janeiro', noches: null }, { lugar: 'Búzios', noches: null }],
+    preciosTemporada: [],
+    hoteles: [],
+    galeria: [assetPaquetes + 'rio-buzios-brasil.jpeg'],
+    incluye: ['Vuelos internacionales con conexión', 'Alojamiento distribuido entre Río de Janeiro y Búzios', 'Desayuno', 'Traslados terrestres', 'Recorrido panorámico por atractivos principales', 'Actividades adicionales no incluidas'],
+    paqueteDestacado: true,
     destacado: true,
     activo: true
   },
@@ -394,7 +512,13 @@ const cargarDatos = async () => {
     for (const destino of destinosDePrueba) {
       await Destino.updateOne({ nombre: destino.nombre }, { $set: destino }, { upsert: true });
     }
-    console.log('Usuarios y catálogo RallyTraver creados o actualizados correctamente.');
+    for (const hotel of hotelesCatalogo) {
+      await Hotel.updateOne({ nombre: hotel.nombre, destino: hotel.destino }, { $set: hotel }, { upsert: true });
+    }
+    for (const vuelo of vuelosCatalogo) {
+      await Vuelo.updateOne({ codigo: vuelo.codigo }, { $set: vuelo }, { upsert: true });
+    }
+    console.log('Usuarios, destinos, hoteles y vuelos de RallyTraver creados o actualizados correctamente.');
   } catch (error) {
     console.error('No se pudieron cargar los datos:', error.message);
     process.exitCode = 1;

@@ -1207,9 +1207,31 @@ footer a {
 .rt-site .rt-nav .rt-logout { border:0; padding:8px 4px; background:transparent; color:#52677c; cursor:pointer; font:inherit; font-size:.82rem; font-weight:700; white-space:nowrap; }
 .rt-site .rt-nav .rt-logout:hover { color:var(--rt-pink); }
 .rt-site .rt-menu-toggle { display:none; background:#fff; border:1px solid #ccd8e5; border-radius:8px; padding:8px 10px; color:var(--rt-navy); font-size:1.1rem; }
-.rt-site .rt-hero { min-height:515px; display:grid; align-content:center; position:relative; isolation:isolate; padding:74px clamp(20px,8vw,160px) 116px; color:#fff; background:linear-gradient(90deg,rgba(2,26,65,.92),rgba(3,68,120,.72)),url('../Images/viajera.jpg') center/cover; }
-.rt-site .rt-hero::after { content:''; position:absolute; inset:0; z-index:-1; background:linear-gradient(120deg,rgba(8,29,73,.35),transparent 55%); }
-.rt-site .rt-hero-content { max-width:660px; }
+.rt-site .rt-hero { min-height:515px; position:relative; overflow:hidden; color:#fff; }
+.rt-site .rt-carousel-track { position:absolute; inset:0; }
+.rt-site .rt-hero-slide { display:grid; align-content:center; position:absolute; inset:0; padding:74px clamp(20px,8vw,160px) 116px; background-position:center; background-size:cover; opacity:0; pointer-events:none; transition:opacity .75s ease; }
+.rt-site .rt-hero-slide.is-active { z-index:1; opacity:1; pointer-events:auto; }
+.rt-site .rt-slide-inicio { background-image:linear-gradient(90deg,rgba(2,26,65,.92),rgba(3,68,120,.72)),url('../Images/viajera.jpg'); }
+.rt-site .rt-slide-paquetes { background-image:url('../Images/banners/hero-paquetes-caribe.png'); }
+.rt-site .rt-slide-vuelos { background-image:url('../Images/banners/hero-vuelos.png'); }
+.rt-site .rt-slide-hoteles { background-image:url('../Images/banners/hero-hoteles.png'); }
+.rt-site .rt-slide-colombia { background-image:url('../Images/banners/hero-escapadas-colombia.png'); }
+.rt-site .rt-hero-content { position:relative; z-index:2; max-width:660px; }
+.rt-site .rt-hero-slide-action { position:absolute; z-index:2; bottom:68px; left:clamp(20px,8vw,160px); }
+.rt-site .rt-carousel-controls { position:static; }
+.rt-site .rt-carousel-controls button { display:grid; place-items:center; position:absolute; z-index:3; top:50%; width:43px; height:43px; border:1px solid rgba(255,255,255,.75); border-radius:50%; background:rgba(5,31,74,.5); color:#fff; cursor:pointer; line-height:1; transform:translateY(-50%); transition:background .2s ease,transform .2s ease; }
+.rt-site .rt-carousel-controls button svg { display:block; width:21px; height:21px; fill:none; stroke:currentColor; stroke-linecap:round; stroke-linejoin:round; stroke-width:2.5; }
+.rt-site .rt-carousel-controls [data-carousel-prev] svg { transform:translateX(-5px); }
+.rt-site .rt-carousel-controls [data-carousel-prev] { left:22px; }
+.rt-site .rt-carousel-controls [data-carousel-next] { right:22px; }
+.rt-site .rt-carousel-controls button:hover { background:rgba(5,31,74,.8); transform:translateY(-50%) scale(1.06); }
+.rt-site .rt-carousel-dots { display:flex; gap:9px; position:absolute; z-index:3; bottom:28px; left:50%; transform:translateX(-50%); }
+.rt-site .rt-carousel-dots button { width:10px; height:10px; padding:0; border:1px solid #fff; border-radius:50%; background:rgba(255,255,255,.35); cursor:pointer; transition:width .2s ease,background .2s ease; }
+.rt-site .rt-carousel-dots button.is-active { width:28px; border-radius:99px; background:#fff; }
+.rt-site .rt-carousel-pause { display:grid; place-items:center; position:absolute; z-index:3; right:24px; bottom:24px; width:38px; height:38px; border:1px solid rgba(255,255,255,.72); border-radius:50%; background:rgba(5,31,74,.62); color:#fff; cursor:pointer; }
+.rt-site .rt-carousel-pause svg { display:block; width:17px; height:17px; fill:currentColor; stroke:none; transform:translateX(-1px); }
+.rt-site .rt-carousel-pause:hover { background:rgba(5,31,74,.9); }
+.rt-site .rt-visually-hidden { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 .rt-site .rt-eyebrow { display:inline-block; margin-bottom:14px; padding:7px 13px; border:1px solid rgba(255,255,255,.55); border-radius:999px; background:rgba(255,255,255,.13); font-size:.82rem; font-weight:700; letter-spacing:.04em; }
 .rt-site .rt-hero h1 { margin:0; color:#fff; font-size:clamp(2.35rem,5vw,4.5rem); line-height:1.06; letter-spacing:-.035em; }
 .rt-site .rt-hero p { max-width:590px; margin:20px 0 28px; color:#f4f9ff; font-size:1.08rem; }
@@ -1257,6 +1279,10 @@ footer a {
 .rt-site .rt-card button { flex:1; min-height:39px; padding:9px; background:var(--rt-pink); color:#fff; font-size:.82rem; }
 .rt-site .rt-card .rt-outline { border:1px solid #cfdce8; background:#fff; color:var(--rt-blue); }
 .rt-site .rt-card .rt-outline:hover { background:#eaf5ff; }
+.rt-site .rt-hotel-plan { display:inline-block; margin-bottom:2px; padding:5px 9px; border-radius:999px; background:#dff8e9; color:#087b40; font-size:.72rem; font-weight:800; }
+.rt-site .rt-hotel-plan.is-basic { background:#eaf5ff; color:var(--rt-blue); }
+.rt-site .rt-detail-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:20px; }
+.rt-site .rt-hotel-filters { grid-template-columns:1.25fr repeat(3,minmax(130px,1fr)) auto; }
 .rt-site .rt-banner { display:grid; grid-template-columns:1.1fr .9fr; overflow:hidden; border-radius:18px; background:var(--rt-navy); color:#fff; }
 .rt-site .rt-banner-content { display:grid; align-content:center; padding:48px; }
 .rt-site .rt-banner h2 { margin:0 0 12px; color:#fff; font-size:2.1rem; }
@@ -1322,6 +1348,10 @@ footer a {
 .rt-site .rt-empty h2 { margin:0 0 9px; color:var(--rt-navy); font-size:1.35rem; }
 .rt-site .rt-empty p { margin:0 0 18px; }
 .rt-site .rt-reservation-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+.rt-site .rt-account-subsection + .rt-account-subsection { margin-top:54px; padding-top:42px; border-top:1px solid #d8e5f0; }
+.rt-site .rt-account-subsection > div:first-child { margin-bottom:19px; }
+.rt-site .rt-account-subsection h2 { margin:0; color:var(--rt-navy); font-size:1.45rem; }
+.rt-site .rt-account-subsection p { margin:6px 0 0; color:#607286; font-size:.9rem; }
 .rt-site .rt-reservation-card { padding:21px; border:1px solid #dce8f3; border-radius:14px; background:#fff; box-shadow:0 8px 22px rgba(20,54,86,.08); }
 .rt-site .rt-reservation-card-top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:18px; }
 .rt-site .rt-reservation-code { color:var(--rt-navy); font-size:.8rem; font-weight:800; letter-spacing:.04em; }
@@ -1350,12 +1380,23 @@ footer a {
 .rt-site .rt-admin-table td strong { color:var(--rt-navy); }
 .rt-site .rt-admin-table td small { display:block; margin-top:3px; color:#73859a; font-size:.75rem; }
 .rt-site .rt-admin-table select { min-width:170px; padding:8px; border:1px solid #bcccdc; border-radius:7px; background:#fff; color:#304b68; font:inherit; font-size:.8rem; }
+.rt-site .rt-admin-accommodation { margin-top:56px; padding-top:46px; border-top:1px solid #d8e5f0; }
 @media (max-width:960px) { .rt-site .rt-nav { gap:12px; } .rt-site .rt-grid,.rt-site .rt-destinos-grid,.rt-site .rt-reservation-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .rt-site .rt-search-form,.rt-site .rt-filters,.rt-site .rt-admin-filters { grid-template-columns:1fr 1fr; } .rt-site .rt-banner { grid-template-columns:1fr; } .rt-site .rt-banner-image { min-height:220px; } .rt-site .rt-admin-stats { grid-template-columns:repeat(2,1fr); } }
 @media (max-width:680px) { .rt-site .rt-header { padding:10px 18px; } .rt-site .rt-menu-toggle { display:block; } .rt-site .rt-nav { display:none; position:absolute; top:76px; left:12px; right:12px; padding:15px; border-radius:12px; background:#fff; box-shadow:0 12px 28px rgba(0,0,0,.15); flex-direction:column; align-items:stretch; } .rt-site .rt-nav.is-open { display:flex; } .rt-site .rt-nav a { padding:8px 4px; } .rt-site .rt-logout { text-align:left; padding:8px 4px; } .rt-site .rt-hero { min-height:450px; padding:62px 22px 95px; } .rt-site .rt-search-box { width:calc(100% - 30px); padding:16px; margin-top:-48px; } .rt-site .rt-search-form,.rt-site .rt-filters,.rt-site .rt-admin-filters { grid-template-columns:1fr; } .rt-site .rt-section { padding:55px 20px; } .rt-site .rt-section-heading,.rt-site .rt-admin-top { align-items:start; flex-direction:column; } .rt-site .rt-grid,.rt-site .rt-destinos-grid,.rt-site .rt-benefits,.rt-site .rt-footer,.rt-site .rt-detail-facts,.rt-site .rt-reservation-grid,.rt-site .rt-admin-stats { grid-template-columns:1fr; } .rt-site .rt-detail-facts .rt-detail-facts-wide { grid-column:auto; } .rt-site .rt-card-media { height:210px; } .rt-site .rt-banner-content { padding:30px 24px; } .rt-site .rt-detail-gallery { grid-template-columns:1fr 1fr; } .rt-site .rt-detail-gallery img:first-child { grid-column:span 2; grid-row:auto; height:220px; } .rt-site .rt-itinerary li { grid-template-columns:28px 1fr; } .rt-site .rt-itinerary li span { grid-column:2; } .rt-site .rt-footer { padding:40px 20px; } .rt-site .rt-whatsapp { right:13px; bottom:13px; font-size:.84rem; } }
 
 
 .rt-site .rt-card .rt-favorite { position:absolute; right:12px; top:12px; z-index:2; display:grid; place-items:center; width:37px; min-height:37px; height:37px; margin:0; padding:0; border:0; border-radius:50%; background:#fff; color:#e81e67; font-size:1.15rem; box-shadow:0 3px 10px rgba(0,0,0,.15); }
 .rt-site .rt-card .rt-favorite.is-favorite { background:#e81e67; color:#fff; }
+
+@media (max-width:680px) {
+  .rt-site .rt-hero-slide { padding:62px 22px 94px; }
+  .rt-site .rt-hero-slide-action { bottom:64px; left:22px; }
+  .rt-site .rt-carousel-controls button { width:37px; height:37px; }
+  .rt-site .rt-carousel-controls [data-carousel-prev] { left:11px; }
+  .rt-site .rt-carousel-controls [data-carousel-next] { right:11px; }
+  .rt-site .rt-carousel-pause { right:13px; bottom:14px; }
+  .rt-site .rt-carousel-dots { bottom:18px; }
+}
 
 /* Acceso y registro de RallyTraver */
 .access-page { min-height:100vh; background:linear-gradient(135deg,#7729c7,#3ba4d6); }
@@ -1491,4 +1532,70 @@ footer a {
   .rt-site .rt-flight-form { padding:26px 20px; }
   .rt-site .rt-flight-heading { flex-direction:column; }
   .rt-site .rt-flight-fields { grid-template-columns:1fr; }
+}
+
+/* Catálogo de vuelos */
+.rt-site .rt-flight-search-fields { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.rt-site .rt-flight-results-section { padding-top:78px; }
+.rt-site .rt-section-heading { display:flex; align-items:end; justify-content:space-between; gap:24px; margin-bottom:28px; }
+.rt-site .rt-section-heading h2 { margin:4px 0 7px; color:var(--rt-navy); font-size:2rem; }
+.rt-site .rt-section-heading p { max-width:670px; margin:0; color:#62758a; line-height:1.6; }
+.rt-site .rt-result-count { flex:0 0 auto; padding:8px 12px; border-radius:999px; background:#eaf5ff; color:var(--rt-blue); font-size:.83rem; font-weight:800; }
+.rt-site .rt-flight-results { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px; }
+.rt-site .rt-flight-card { display:flex; flex-direction:column; min-width:0; padding:22px; border:1px solid #d9e6f1; border-radius:18px; background:#fff; box-shadow:0 10px 26px rgba(7,29,73,.08); }
+.rt-site .rt-flight-card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding-bottom:17px; border-bottom:1px solid #e5edf4; }
+.rt-site .rt-airline { display:flex; align-items:center; gap:10px; min-width:0; color:var(--rt-navy); }
+.rt-site .rt-airline img { width:67px; height:34px; padding:4px 7px; box-sizing:border-box; border:1px solid #dce7f0; border-radius:7px; background:#fff; object-fit:contain; }
+.rt-site .rt-airline strong { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.98rem; }
+.rt-site .rt-flight-category { padding:5px 9px; border-radius:999px; background:#f4f7fb; color:#597089; font-size:.68rem; font-weight:800; text-transform:capitalize; }
+.rt-site .rt-flight-route { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:12px; padding:20px 0 16px; color:var(--rt-navy); }
+.rt-site .rt-flight-route > div:last-child { text-align:right; }
+.rt-site .rt-flight-route strong { display:block; font-size:1.55rem; line-height:1; }
+.rt-site .rt-flight-route span { display:block; margin-top:6px; color:#62758a; font-size:.78rem; font-weight:600; }
+.rt-site .rt-flight-route > b { color:var(--rt-pink); font-size:1.3rem; }
+.rt-site .rt-flight-legs { display:grid; gap:9px; }
+.rt-site .rt-flight-leg { display:grid; grid-template-columns:78px 1fr; column-gap:10px; align-items:center; padding:10px 11px; border-radius:10px; background:#f6f9fc; }
+.rt-site .rt-flight-leg > span { color:#64778a; font-size:.72rem; font-weight:800; text-transform:uppercase; }
+.rt-site .rt-flight-leg strong { color:var(--rt-navy); font-size:.93rem; }
+.rt-site .rt-flight-leg strong i { color:var(--rt-pink); font-style:normal; }
+.rt-site .rt-flight-leg small { grid-column:2; color:#5c7186; font-size:.73rem; }
+.rt-site .rt-flight-features { display:grid; gap:7px; padding:15px 0; color:#50677c; font-size:.75rem; line-height:1.45; }
+.rt-site .rt-flight-features span:first-child { color:var(--rt-navy); font-weight:800; }
+.rt-site .rt-flight-card-bottom { display:flex; align-items:end; justify-content:space-between; gap:16px; margin-top:auto; padding-top:16px; border-top:1px solid #e5edf4; }
+.rt-site .rt-flight-card-bottom small,.rt-site .rt-flight-card-bottom span { display:block; color:#637489; font-size:.71rem; }
+.rt-site .rt-flight-card-bottom strong { display:block; margin:3px 0; color:var(--rt-navy); font-size:1.16rem; }
+.rt-site .rt-flight-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:8px; }
+.rt-site .rt-flight-actions .rt-outline,.rt-site .rt-flight-actions .rt-primary { display:inline-flex; align-items:center; justify-content:center; min-height:38px; box-sizing:border-box; padding:9px 11px; border-radius:8px; text-align:center; font-size:.74rem; font-weight:800; text-decoration:none; }
+.rt-site .rt-flight-actions .rt-outline { border:1px solid #c7d7e6; background:#fff; color:var(--rt-navy); }
+.rt-site .rt-flight-actions .rt-primary { border:0; cursor:pointer; }
+.rt-site .rt-flight-selection { display:flex; align-items:center; justify-content:space-between; gap:16px; margin:18px 0; padding:14px; border:1px solid #d8e7f4; border-radius:12px; background:#f7fbff; color:var(--rt-navy); }
+.rt-site .rt-flight-selection > div { display:flex; align-items:center; gap:12px; min-width:0; }
+.rt-site .rt-flight-selection img { width:67px; height:36px; padding:4px 7px; box-sizing:border-box; border:1px solid #d9e4ee; border-radius:7px; background:#fff; object-fit:contain; }
+.rt-site .rt-flight-selection p { margin:0; color:#50677c; font-size:.81rem; line-height:1.45; }
+.rt-site .rt-flight-selection p strong { color:var(--rt-navy); }
+.rt-site .rt-flight-selection > strong { flex:0 0 auto; color:var(--rt-navy); font-size:1rem; text-align:right; }
+.rt-site .rt-flight-selection > strong small { display:block; margin-top:3px; color:#657a8e; font-size:.67rem; font-weight:600; }
+.rt-site .rt-service-link { display:block; color:inherit; text-decoration:none; transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease; }
+.rt-site .rt-service-link:hover { transform:translateY(-4px); border-color:#bcd9ee; box-shadow:0 16px 28px rgba(20,54,86,.12); }
+.rt-site .rt-service-link:focus-visible { outline:3px solid rgba(3,95,156,.3); outline-offset:3px; }
+.rt-site .rt-service-link > span { display:inline-block; margin-top:16px; color:var(--rt-pink); font-size:.79rem; font-weight:800; }
+.rt-site .rt-service-icon svg { width:25px; height:25px; fill:none; stroke:var(--rt-navy); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.rt-site .rt-flight-card-actions { display:flex; align-items:center; gap:8px; }
+.rt-site .rt-flight-card .rt-favorite { position:static; width:34px; min-height:34px; height:34px; flex:0 0 34px; padding:0; font-size:1.05rem; }
+.rt-site .rt-favorite-vuelo .rt-card-media { display:grid; place-items:center; background:#f5faff; }
+.rt-site .rt-favorite-vuelo .rt-card-media img { width:72%; height:72%; object-fit:contain; }
+
+@media (max-width:980px) {
+  .rt-site .rt-flight-search-fields { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .rt-site .rt-flight-results { grid-template-columns:1fr; }
+}
+
+@media (max-width:620px) {
+  .rt-site .rt-flight-search-fields { grid-template-columns:1fr; }
+  .rt-site .rt-section-heading,.rt-site .rt-flight-card-bottom { align-items:stretch; flex-direction:column; }
+  .rt-site .rt-result-count { align-self:flex-start; }
+  .rt-site .rt-flight-actions { justify-content:stretch; }
+  .rt-site .rt-flight-actions .rt-outline,.rt-site .rt-flight-actions .rt-primary { flex:1 1 135px; }
+  .rt-site .rt-flight-selection { align-items:stretch; flex-direction:column; }
+  .rt-site .rt-flight-selection > strong { text-align:left; }
 }

@@ -20,6 +20,16 @@ const contactoRoutes = require('./routes/contactoRoute');
 app.use('/api/contactos', contactoRoutes);
 const reservaRoutes = require('./routes/reservaRoute');
 app.use('/api/reservas', reservaRoutes);
+const hotelRoutes = require('./routes/hotelRoute');
+app.use('/api/hoteles', hotelRoutes);
+const solicitudAlojamientoRoutes = require('./routes/solicitudAlojamientoRoute');
+app.use('/api/solicitudes-alojamiento', solicitudAlojamientoRoutes);
+const vueloRoutes = require('./routes/vueloRoute');
+app.use('/api/vuelos', vueloRoutes);
+const solicitudVueloRoutes = require('./routes/solicitudVueloRoute');
+app.use('/api/solicitudes-vuelo', solicitudVueloRoutes);
+const favoritoRoutes = require('./routes/favoritoRoute');
+app.use('/api/favoritos', favoritoRoutes);
 app.get('/api/salud', (req, res) => {
   res.json({
     estado: mongoose.connection.readyState === 1 ? 'ok' : 'sin conexión',

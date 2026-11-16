@@ -91,14 +91,14 @@ function compactarMenuExplorar(nav) {
   if (nav.querySelector('[data-nav-menu="explorar"]')) return;
   const destinos = nav.querySelector('a[href="landingpage.html"]');
   const paquetes = nav.querySelector('a[href="landingpage.html?categoria=internacional"]');
-  const hoteles = nav.querySelector('a[href="landingpage.html?hoteles=true"]');
+  const hoteles = nav.querySelector('a[href="hoteles.html"], a[href="landingpage.html?hoteles=true"]');
   if (!destinos || !paquetes || !hoteles) return;
 
   const explorar = crearMenuRallyTraver('explorar', 'Explorar', [
     crearEnlaceMenu('Destinos', 'landingpage.html'),
     crearEnlaceMenu('Vuelos', 'vuelos.html'),
-    crearEnlaceMenu('Paquetes', 'landingpage.html?categoria=internacional'),
-    crearEnlaceMenu('Hoteles', 'landingpage.html?hoteles=true')
+    crearEnlaceMenu('Paquetes', 'landingpage.html?paquetes=true'),
+    crearEnlaceMenu('Hoteles', 'hoteles.html')
   ]);
   nav.insertBefore(explorar, destinos);
   destinos.remove();
@@ -109,6 +109,7 @@ function compactarMenuExplorar(nav) {
 function crearMenuCuenta(sesion) {
   const elementos = [
     crearEnlaceMenu('Mi perfil', 'perfil.html'),
+    crearEnlaceMenu('Mis favoritos', 'favoritos.html'),
     crearEnlaceMenu('Mis reservas', 'mis-reservas.html')
   ];
   if (sesion.usuario.role === 'admin') elementos.push(crearEnlaceMenu('Administración', 'admin.html'));
