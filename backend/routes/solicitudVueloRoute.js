@@ -3,6 +3,8 @@ const ExcelJS = require('exceljs');
 const Vuelo = require('../models/Vuelo');
 const SolicitudVuelo = require('../models/SolicitudVuelo');
 const { autenticar, soloAdministrador } = require('../middlewares/autenticacion');
+const { notificarAdministradores, notificarUsuario, eliminarNotificacionesSolicitud, mensajeEstado } = require('../services/notificaciones');
+const { enviarCorreoEstadoSolicitud } = require('../services/correoBrevo');
 
 const router = express.Router();
 const estadosValidos = ['Pendiente de confirmación', 'Confirmada', 'Cancelada'];
@@ -53,6 +55,15 @@ router.post('/', autenticar, async (req, res) => {
       tipoViaje, fechaSalida: salida, fechaRegreso: regreso, cantidadViajeros: viajeros,
       precioReferencial: precioBase * viajeros, comentario: comentario || ''
     });
+
+    await notificarAdministradores({
+      tipo: 'nueva_solicitud',
+      categoria: 'vuelo',
+      codigo: solicitud.codigo,
+      titulo: 'Nueva solicitud de vuelo',
+      mensaje: `${solicitud.nombreCliente} solicitó la ruta ${solicitud.origen} a ${solicitud.destino}.`,
+      enlace: `admin.html#${solicitud.codigo}`
+    }).catch((error) => console.error('No se pudo crear la notificación de vuelo:', error.message));
 
     res.status(201).json({
       message: 'Tu solicitud de vuelo fue registrada. Confirmaremos disponibilidad y tarifa final.',
@@ -139,11 +150,52 @@ router.get('/', autenticar, soloAdministrador, async (req, res) => {
 router.patch('/:id/estado', autenticar, soloAdministrador, async (req, res) => {
   try {
     if (!estadosValidos.includes(req.body.estado)) return res.status(400).json({ error: 'El estado seleccionado no es válido.' });
-    const solicitud = await SolicitudVuelo.findByIdAndUpdate(req.params.id, { estado: req.body.estado }, { new: true, runValidators: true });
+    const solicitud = await SolicitudVuelo.findById(req.params.id);
     if (!solicitud) return res.status(404).json({ error: 'Solicitud de vuelo no encontrada.' });
+    const estadoAnterior = solicitud.estado;
+    solicitud.estado = req.body.estado;
+    await solicitud.save();
+
+    if (estadoAnterior !== solicitud.estado) {
+      const contenido = mensajeEstado('vuelo', solicitud.codigo, solicitud.estado);
+      await notificarUsuario(solicitud.usuario, {
+        tipo: 'estado_actualizado',
+        categoria: 'vuelo',
+        codigo: solicitud.codigo,
+        ...contenido,
+        enlace: `mis-reservas.html#${solicitud.codigo}`
+      }).catch((error) => console.error('No se pudo crear la notificación de vuelo:', error.message));
+
+      await enviarCorreoEstadoSolicitud({
+        emailCliente: solicitud.emailCliente,
+        nombreCliente: solicitud.nombreCliente,
+        categoria: 'vuelo',
+        codigo: solicitud.codigo,
+        estado: solicitud.estado,
+        titulo: contenido.titulo,
+        detalle: `Ruta: ${solicitud.origen} → ${solicitud.destino}. Aerolínea: ${solicitud.aerolinea}.`
+      }).catch((error) => console.error('No se pudo enviar el correo de vuelo:', error.message));
+    }
+
     res.json({ message: `La solicitud ${solicitud.codigo} fue actualizada a ${solicitud.estado}.`, solicitud });
   } catch (error) {
     res.status(400).json({ error: 'No se pudo actualizar la solicitud de vuelo.' });
+  }
+});
+
+router.delete('/:id', autenticar, soloAdministrador, async (req, res) => {
+  try {
+    const solicitud = await SolicitudVuelo.findById(req.params.id);
+    if (!solicitud) return res.status(404).json({ error: 'Solicitud de vuelo no encontrada.' });
+
+    await Promise.all([
+      SolicitudVuelo.deleteOne({ _id: solicitud._id }),
+      eliminarNotificacionesSolicitud('vuelo', solicitud.codigo)
+    ]);
+
+    res.json({ message: `Solicitud de vuelo ${solicitud.codigo} eliminada correctamente.` });
+  } catch (error) {
+    res.status(400).json({ error: 'No se pudo eliminar la solicitud de vuelo.' });
   }
 });
 

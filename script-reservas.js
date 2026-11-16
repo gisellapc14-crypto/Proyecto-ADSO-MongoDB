@@ -46,17 +46,27 @@ async function respuestaSegura(respuesta) {
 
 function tarjetaReserva(reserva) {
   const estadoClase = reserva.estado === 'Confirmada' ? 'is-confirmed' : reserva.estado === 'Cancelada' ? 'is-cancelled' : 'is-pending';
-  return '<article class="rt-reservation-card"><div class="rt-reservation-card-top"><span class="rt-reservation-code">' + escaparHTML(reserva.codigo) + '</span><span class="rt-reservation-status ' + estadoClase + '">' + escaparHTML(reserva.estado) + '</span></div><h2>' + escaparHTML(reserva.destinoNombre) + '</h2><dl><div><dt>Fecha estimada</dt><dd>' + fechaCorta(reserva.fechaViaje) + '</dd></div><div><dt>Viajeros</dt><dd>' + escaparHTML(reserva.cantidadViajeros) + '</dd></div><div><dt>Precio referencial</dt><dd>' + formatoCOPReservas.format(reserva.precioReferencial || 0) + '</dd></div><div><dt>Registrada</dt><dd>' + fechaCorta(reserva.createdAt) + '</dd></div></dl>' + (reserva.comentario ? '<p class="rt-reservation-comment">' + escaparHTML(reserva.comentario) + '</p>' : '') + '</article>';
+  return '<article class="rt-reservation-card" data-solicitud-codigo="' + escaparHTML(reserva.codigo) + '"><div class="rt-reservation-card-top"><span class="rt-reservation-code">' + escaparHTML(reserva.codigo) + '</span><span class="rt-reservation-status ' + estadoClase + '">' + escaparHTML(reserva.estado) + '</span></div><h2>' + escaparHTML(reserva.destinoNombre) + '</h2><dl><div><dt>Fecha estimada</dt><dd>' + fechaCorta(reserva.fechaViaje) + '</dd></div><div><dt>Viajeros</dt><dd>' + escaparHTML(reserva.cantidadViajeros) + '</dd></div><div><dt>Precio referencial</dt><dd>' + formatoCOPReservas.format(reserva.precioReferencial || 0) + '</dd></div><div><dt>Registrada</dt><dd>' + fechaCorta(reserva.createdAt) + '</dd></div></dl>' + (reserva.comentario ? '<p class="rt-reservation-comment">' + escaparHTML(reserva.comentario) + '</p>' : '') + '</article>';
 }
 
 function tarjetaSolicitudAlojamiento(solicitud) {
   const estadoClase = solicitud.estado === 'Confirmada' ? 'is-confirmed' : solicitud.estado === 'Cancelada' ? 'is-cancelled' : 'is-pending';
-  return '<article class="rt-reservation-card"><div class="rt-reservation-card-top"><span class="rt-reservation-code">' + escaparHTML(solicitud.codigo) + '</span><span class="rt-reservation-status ' + estadoClase + '">' + escaparHTML(solicitud.estado) + '</span></div><h2>' + escaparHTML(solicitud.hotelNombre) + '</h2><dl><div><dt>Destino</dt><dd>' + escaparHTML(solicitud.destino) + '</dd></div><div><dt>Entrada</dt><dd>' + fechaCorta(solicitud.fechaEntrada) + '</dd></div><div><dt>Salida</dt><dd>' + fechaCorta(solicitud.fechaSalida) + '</dd></div><div><dt>Huéspedes</dt><dd>' + escaparHTML(solicitud.cantidadHuespedes) + ' · ' + escaparHTML(solicitud.habitaciones) + ' hab.</dd></div><div><dt>Registrada</dt><dd>' + fechaCorta(solicitud.createdAt) + '</dd></div></dl>' + (solicitud.comentario ? '<p class="rt-reservation-comment">' + escaparHTML(solicitud.comentario) + '</p>' : '') + '</article>';
+  return '<article class="rt-reservation-card" data-solicitud-codigo="' + escaparHTML(solicitud.codigo) + '"><div class="rt-reservation-card-top"><span class="rt-reservation-code">' + escaparHTML(solicitud.codigo) + '</span><span class="rt-reservation-status ' + estadoClase + '">' + escaparHTML(solicitud.estado) + '</span></div><h2>' + escaparHTML(solicitud.hotelNombre) + '</h2><dl><div><dt>Destino</dt><dd>' + escaparHTML(solicitud.destino) + '</dd></div><div><dt>Entrada</dt><dd>' + fechaCorta(solicitud.fechaEntrada) + '</dd></div><div><dt>Salida</dt><dd>' + fechaCorta(solicitud.fechaSalida) + '</dd></div><div><dt>Huéspedes</dt><dd>' + escaparHTML(solicitud.cantidadHuespedes) + ' · ' + escaparHTML(solicitud.habitaciones) + ' hab.</dd></div><div><dt>Registrada</dt><dd>' + fechaCorta(solicitud.createdAt) + '</dd></div></dl>' + (solicitud.comentario ? '<p class="rt-reservation-comment">' + escaparHTML(solicitud.comentario) + '</p>' : '') + '</article>';
 }
 
 function tarjetaSolicitudVuelo(solicitud) {
   const estadoClase = solicitud.estado === 'Confirmada' ? 'is-confirmed' : solicitud.estado === 'Cancelada' ? 'is-cancelled' : 'is-pending';
-  return '<article class="rt-reservation-card"><div class="rt-reservation-card-top"><span class="rt-reservation-code">' + escaparHTML(solicitud.codigo) + '</span><span class="rt-reservation-status ' + estadoClase + '">' + escaparHTML(solicitud.estado) + '</span></div><h2>' + escaparHTML(solicitud.origen) + ' → ' + escaparHTML(solicitud.destino) + '</h2><dl><div><dt>Aerolínea</dt><dd>' + escaparHTML(solicitud.aerolinea) + '</dd></div><div><dt>Salida</dt><dd>' + fechaCorta(solicitud.fechaSalida) + '</dd></div>' + (solicitud.tipoViaje === 'Ida y vuelta' ? '<div><dt>Regreso</dt><dd>' + fechaCorta(solicitud.fechaRegreso) + '</dd></div>' : '') + '<div><dt>Viajeros</dt><dd>' + escaparHTML(solicitud.cantidadViajeros) + '</dd></div><div><dt>Tarifa referencial</dt><dd>' + formatoCOPReservas.format(solicitud.precioReferencial || 0) + '</dd></div><div><dt>Registrada</dt><dd>' + fechaCorta(solicitud.createdAt) + '</dd></div></dl>' + (solicitud.comentario ? '<p class="rt-reservation-comment">' + escaparHTML(solicitud.comentario) + '</p>' : '') + '</article>';
+  return '<article class="rt-reservation-card" data-solicitud-codigo="' + escaparHTML(solicitud.codigo) + '"><div class="rt-reservation-card-top"><span class="rt-reservation-code">' + escaparHTML(solicitud.codigo) + '</span><span class="rt-reservation-status ' + estadoClase + '">' + escaparHTML(solicitud.estado) + '</span></div><h2>' + escaparHTML(solicitud.origen) + ' → ' + escaparHTML(solicitud.destino) + '</h2><dl><div><dt>Aerolínea</dt><dd>' + escaparHTML(solicitud.aerolinea) + '</dd></div><div><dt>Salida</dt><dd>' + fechaCorta(solicitud.fechaSalida) + '</dd></div>' + (solicitud.tipoViaje === 'Ida y vuelta' ? '<div><dt>Regreso</dt><dd>' + fechaCorta(solicitud.fechaRegreso) + '</dd></div>' : '') + '<div><dt>Viajeros</dt><dd>' + escaparHTML(solicitud.cantidadViajeros) + '</dd></div><div><dt>Tarifa referencial</dt><dd>' + formatoCOPReservas.format(solicitud.precioReferencial || 0) + '</dd></div><div><dt>Registrada</dt><dd>' + fechaCorta(solicitud.createdAt) + '</dd></div></dl>' + (solicitud.comentario ? '<p class="rt-reservation-comment">' + escaparHTML(solicitud.comentario) + '</p>' : '') + '</article>';
+}
+
+function resaltarSolicitudDesdeNotificacion() {
+  const codigo = decodeURIComponent(window.location.hash.slice(1));
+  if (!codigo) return;
+  const destino = Array.from(document.querySelectorAll('[data-solicitud-codigo]')).find((elemento) => elemento.dataset.solicitudCodigo === codigo);
+  if (!destino || destino.classList.contains('is-notification-target')) return;
+  destino.classList.add('is-notification-target');
+  destino.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  window.setTimeout(() => destino.classList.remove('is-notification-target'), 5500);
 }
 
 async function cargarMisReservas() {
@@ -70,6 +80,7 @@ async function cargarMisReservas() {
     const respuesta = await fetch(API_RESERVAS_CLIENTE + '/mis-reservas', { headers: encabezadosAutenticados() });
     const reservas = await respuestaSegura(respuesta);
     contenedor.innerHTML = reservas.length ? reservas.map(tarjetaReserva).join('') : '<div class="rt-empty"><h2>Aún no tienes reservas registradas.</h2><p>Explora las experiencias disponibles y registra tu próxima aventura.</p><a class="rt-primary" href="landingpage.html">Explorar destinos</a></div>';
+    resaltarSolicitudDesdeNotificacion();
   } catch (error) {
     contenedor.innerHTML = '<p class="rt-empty">' + escaparHTML(error.message) + '</p>';
   }
@@ -83,6 +94,7 @@ async function cargarMisSolicitudesAlojamiento() {
     const respuesta = await fetch(API_SOLICITUDES_ALOJAMIENTO_CLIENTE + '/mis-solicitudes', { headers: encabezadosAutenticados() });
     const solicitudes = await respuestaSegura(respuesta);
     contenedor.innerHTML = solicitudes.length ? solicitudes.map(tarjetaSolicitudAlojamiento).join('') : '<div class="rt-empty"><h2>Aún no tienes solicitudes de alojamiento.</h2><p>Explora hoteles y registra tu próxima estadía.</p><a class="rt-primary" href="hoteles.html">Explorar hoteles</a></div>';
+    resaltarSolicitudDesdeNotificacion();
   } catch (error) {
     contenedor.innerHTML = '<p class="rt-empty">' + escaparHTML(error.message) + '</p>';
   }
@@ -96,6 +108,7 @@ async function cargarMisSolicitudesVuelo() {
     const respuesta = await fetch(API_SOLICITUDES_VUELO_CLIENTE + '/mis-solicitudes', { headers: encabezadosAutenticados() });
     const solicitudes = await respuestaSegura(respuesta);
     contenedor.innerHTML = solicitudes.length ? solicitudes.map(tarjetaSolicitudVuelo).join('') : '<div class="rt-empty"><h2>Aún no tienes solicitudes de vuelo.</h2><p>Explora las opciones disponibles y registra la ruta de tu próximo viaje.</p><a class="rt-primary" href="vuelos.html">Explorar vuelos</a></div>';
+    resaltarSolicitudDesdeNotificacion();
   } catch (error) {
     contenedor.innerHTML = '<p class="rt-empty">' + escaparHTML(error.message) + '</p>';
   }
@@ -123,15 +136,43 @@ function mostrarMensajeAdmin(idMensaje, texto, tipo = 'info') {
   }
 }
 
+function configurarBotonesEliminar(tabla, selector, api, idMensaje, recargar, etiqueta) {
+  tabla.querySelectorAll(selector).forEach((boton) => {
+    boton.addEventListener('click', () => eliminarSolicitudAdmin(boton, api, idMensaje, recargar, etiqueta));
+  });
+}
+
+async function eliminarSolicitudAdmin(boton, api, idMensaje, recargar, etiqueta) {
+  const codigo = boton.dataset.codigo || 'seleccionada';
+  const confirmar = window.confirm('¿Eliminar definitivamente ' + etiqueta + ' ' + codigo + '? Esta acción no se puede deshacer.');
+  if (!confirmar) return;
+
+  boton.disabled = true;
+  try {
+    const respuesta = await fetch(api + '/' + encodeURIComponent(boton.dataset.id), {
+      method: 'DELETE',
+      headers: encabezadosAutenticados()
+    });
+    const resultado = await respuestaSegura(respuesta);
+    await recargar();
+    mostrarMensajeAdmin(idMensaje, resultado.message || etiqueta + ' eliminada correctamente.', 'success');
+  } catch (error) {
+    mostrarMensajeAdmin(idMensaje, error.message, 'error');
+    boton.disabled = false;
+  }
+}
+
 function renderizarTablaAdmin(reservas) {
   const tabla = document.getElementById('tabla-reservas');
   if (!tabla) return;
   if (!reservas.length) {
-    tabla.innerHTML = '<tr><td colspan="7">No hay reservas que coincidan con los filtros.</td></tr>';
+    tabla.innerHTML = '<tr><td colspan="8">No hay reservas que coincidan con los filtros.</td></tr>';
     return;
   }
-  tabla.innerHTML = reservas.map((reserva) => '<tr><td><strong>' + escaparHTML(reserva.codigo) + '</strong></td><td>' + escaparHTML(reserva.nombreCliente) + '<small>' + escaparHTML(reserva.emailCliente) + '</small><small>' + escaparHTML(reserva.telefonoCliente || 'Sin teléfono') + '</small></td><td>' + escaparHTML(reserva.destinoNombre) + '<small>' + formatoCOPReservas.format(reserva.precioReferencial || 0) + '</small></td><td>' + fechaCorta(reserva.fechaViaje) + '</td><td>' + escaparHTML(reserva.cantidadViajeros) + '</td><td><select data-estado-reserva="' + reserva._id + '">' + opcionesEstado(reserva.estado) + '</select></td><td>' + fechaCorta(reserva.createdAt) + '</td></tr>').join('');
+  tabla.innerHTML = reservas.map((reserva) => '<tr data-solicitud-codigo="' + escaparHTML(reserva.codigo) + '"><td><strong>' + escaparHTML(reserva.codigo) + '</strong></td><td>' + escaparHTML(reserva.nombreCliente) + '<small>' + escaparHTML(reserva.emailCliente) + '</small><small>' + escaparHTML(reserva.telefonoCliente || 'Sin teléfono') + '</small></td><td>' + escaparHTML(reserva.destinoNombre) + '<small>' + formatoCOPReservas.format(reserva.precioReferencial || 0) + '</small></td><td>' + fechaCorta(reserva.fechaViaje) + '</td><td>' + escaparHTML(reserva.cantidadViajeros) + '</td><td><select data-estado-reserva="' + escaparHTML(reserva._id) + '">' + opcionesEstado(reserva.estado) + '</select></td><td>' + fechaCorta(reserva.createdAt) + '</td><td><button class="rt-admin-delete" type="button" data-id="' + escaparHTML(reserva._id) + '" data-codigo="' + escaparHTML(reserva.codigo) + '">Eliminar</button></td></tr>').join('');
   tabla.querySelectorAll('[data-estado-reserva]').forEach((selector) => selector.addEventListener('change', () => actualizarEstadoReserva(selector)));
+  configurarBotonesEliminar(tabla, '.rt-admin-delete', API_RESERVAS_CLIENTE, 'admin-mensaje', cargarReservasAdmin, 'la reserva');
+  resaltarSolicitudDesdeNotificacion();
 }
 
 async function cargarResumenAdmin() {
@@ -161,7 +202,7 @@ async function cargarReservasAdmin() {
   } catch (error) {
     if (mensaje) mensaje.textContent = error.message;
     const tabla = document.getElementById('tabla-reservas');
-    if (tabla) tabla.innerHTML = '<tr><td colspan="7">No se pudieron cargar las reservas.</td></tr>';
+    if (tabla) tabla.innerHTML = '<tr><td colspan="8">No se pudieron cargar las reservas.</td></tr>';
   }
 }
 
@@ -213,11 +254,13 @@ function renderizarTablaAlojamientos(solicitudes) {
   const tabla = document.getElementById('tabla-alojamientos');
   if (!tabla) return;
   if (!solicitudes.length) {
-    tabla.innerHTML = '<tr><td colspan="7">No hay solicitudes de alojamiento registradas.</td></tr>';
+    tabla.innerHTML = '<tr><td colspan="8">No hay solicitudes de alojamiento registradas.</td></tr>';
     return;
   }
-  tabla.innerHTML = solicitudes.map((solicitud) => '<tr><td><strong>' + escaparHTML(solicitud.codigo) + '</strong></td><td>' + escaparHTML(solicitud.nombreCliente) + '<small>' + escaparHTML(solicitud.emailCliente) + '</small><small>' + escaparHTML(solicitud.telefonoCliente || 'Sin teléfono') + '</small></td><td>' + escaparHTML(solicitud.hotelNombre) + '<small>' + escaparHTML(solicitud.destino) + '</small></td><td>' + fechaCorta(solicitud.fechaEntrada) + '<small>Salida: ' + fechaCorta(solicitud.fechaSalida) + '</small></td><td>' + escaparHTML(solicitud.cantidadHuespedes) + ' huésped(es)<small>' + escaparHTML(solicitud.habitaciones) + ' habitación(es)</small></td><td><select data-estado-alojamiento="' + solicitud._id + '">' + opcionesEstado(solicitud.estado) + '</select></td><td>' + fechaCorta(solicitud.createdAt) + '</td></tr>').join('');
+  tabla.innerHTML = solicitudes.map((solicitud) => '<tr data-solicitud-codigo="' + escaparHTML(solicitud.codigo) + '"><td><strong>' + escaparHTML(solicitud.codigo) + '</strong></td><td>' + escaparHTML(solicitud.nombreCliente) + '<small>' + escaparHTML(solicitud.emailCliente) + '</small><small>' + escaparHTML(solicitud.telefonoCliente || 'Sin teléfono') + '</small></td><td>' + escaparHTML(solicitud.hotelNombre) + '<small>' + escaparHTML(solicitud.destino) + '</small></td><td>' + fechaCorta(solicitud.fechaEntrada) + '<small>Salida: ' + fechaCorta(solicitud.fechaSalida) + '</small></td><td>' + escaparHTML(solicitud.cantidadHuespedes) + ' huésped(es)<small>' + escaparHTML(solicitud.habitaciones) + ' habitación(es)</small></td><td><select data-estado-alojamiento="' + escaparHTML(solicitud._id) + '">' + opcionesEstado(solicitud.estado) + '</select></td><td>' + fechaCorta(solicitud.createdAt) + '</td><td><button class="rt-admin-delete" type="button" data-id="' + escaparHTML(solicitud._id) + '" data-codigo="' + escaparHTML(solicitud.codigo) + '">Eliminar</button></td></tr>').join('');
   tabla.querySelectorAll('[data-estado-alojamiento]').forEach((selector) => selector.addEventListener('change', () => actualizarEstadoAlojamiento(selector)));
+  configurarBotonesEliminar(tabla, '.rt-admin-delete', API_SOLICITUDES_ALOJAMIENTO_CLIENTE, 'admin-mensaje-alojamientos', cargarSolicitudesAlojamientoAdmin, 'la solicitud de alojamiento');
+  resaltarSolicitudDesdeNotificacion();
 }
 
 async function cargarSolicitudesAlojamientoAdmin() {
@@ -231,7 +274,7 @@ async function cargarSolicitudesAlojamientoAdmin() {
   } catch (error) {
     if (mensaje) mensaje.textContent = error.message;
     const tabla = document.getElementById('tabla-alojamientos');
-    if (tabla) tabla.innerHTML = '<tr><td colspan="7">No se pudieron cargar las solicitudes de alojamiento.</td></tr>';
+    if (tabla) tabla.innerHTML = '<tr><td colspan="8">No se pudieron cargar las solicitudes de alojamiento.</td></tr>';
   }
 }
 
@@ -281,11 +324,13 @@ function renderizarTablaVuelos(solicitudes) {
   const tabla = document.getElementById('tabla-vuelos');
   if (!tabla) return;
   if (!solicitudes.length) {
-    tabla.innerHTML = '<tr><td colspan="7">No hay solicitudes de vuelo registradas.</td></tr>';
+    tabla.innerHTML = '<tr><td colspan="8">No hay solicitudes de vuelo registradas.</td></tr>';
     return;
   }
-  tabla.innerHTML = solicitudes.map((solicitud) => '<tr><td><strong>' + escaparHTML(solicitud.codigo) + '</strong></td><td>' + escaparHTML(solicitud.nombreCliente) + '<small>' + escaparHTML(solicitud.emailCliente) + '</small><small>' + escaparHTML(solicitud.telefonoCliente || 'Sin teléfono') + '</small></td><td>' + escaparHTML(solicitud.origen) + '<small>Destino: ' + escaparHTML(solicitud.destino) + '</small><small>' + escaparHTML(solicitud.aerolinea) + '</small></td><td>' + escaparHTML(solicitud.tipoViaje) + '<small>Salida: ' + fechaCorta(solicitud.fechaSalida) + '</small>' + (solicitud.tipoViaje === 'Ida y vuelta' ? '<small>Regreso: ' + fechaCorta(solicitud.fechaRegreso) + '</small>' : '') + '</td><td>' + escaparHTML(solicitud.cantidadViajeros) + ' viajero(s)<small>' + formatoCOPReservas.format(solicitud.precioReferencial || 0) + '</small></td><td><select data-estado-vuelo="' + solicitud._id + '">' + opcionesEstado(solicitud.estado) + '</select></td><td>' + fechaCorta(solicitud.createdAt) + '</td></tr>').join('');
+  tabla.innerHTML = solicitudes.map((solicitud) => '<tr data-solicitud-codigo="' + escaparHTML(solicitud.codigo) + '"><td><strong>' + escaparHTML(solicitud.codigo) + '</strong></td><td>' + escaparHTML(solicitud.nombreCliente) + '<small>' + escaparHTML(solicitud.emailCliente) + '</small><small>' + escaparHTML(solicitud.telefonoCliente || 'Sin teléfono') + '</small></td><td>' + escaparHTML(solicitud.origen) + '<small>Destino: ' + escaparHTML(solicitud.destino) + '</small><small>' + escaparHTML(solicitud.aerolinea) + '</small></td><td>' + escaparHTML(solicitud.tipoViaje) + '<small>Salida: ' + fechaCorta(solicitud.fechaSalida) + '</small>' + (solicitud.tipoViaje === 'Ida y vuelta' ? '<small>Regreso: ' + fechaCorta(solicitud.fechaRegreso) + '</small>' : '') + '</td><td>' + escaparHTML(solicitud.cantidadViajeros) + ' viajero(s)<small>' + formatoCOPReservas.format(solicitud.precioReferencial || 0) + '</small></td><td><select data-estado-vuelo="' + escaparHTML(solicitud._id) + '">' + opcionesEstado(solicitud.estado) + '</select></td><td>' + fechaCorta(solicitud.createdAt) + '</td><td><button class="rt-admin-delete" type="button" data-id="' + escaparHTML(solicitud._id) + '" data-codigo="' + escaparHTML(solicitud.codigo) + '">Eliminar</button></td></tr>').join('');
   tabla.querySelectorAll('[data-estado-vuelo]').forEach((selector) => selector.addEventListener('change', () => actualizarEstadoVuelo(selector)));
+  configurarBotonesEliminar(tabla, '.rt-admin-delete', API_SOLICITUDES_VUELO_CLIENTE, 'admin-mensaje-vuelos', cargarSolicitudesVueloAdmin, 'la solicitud de vuelo');
+  resaltarSolicitudDesdeNotificacion();
 }
 
 async function cargarSolicitudesVueloAdmin() {
@@ -304,7 +349,7 @@ async function cargarSolicitudesVueloAdmin() {
   } catch (error) {
     if (mensaje) mensaje.textContent = error.message;
     const tabla = document.getElementById('tabla-vuelos');
-    if (tabla) tabla.innerHTML = '<tr><td colspan="7">No se pudieron cargar las solicitudes de vuelo.</td></tr>';
+    if (tabla) tabla.innerHTML = '<tr><td colspan="8">No se pudieron cargar las solicitudes de vuelo.</td></tr>';
   }
 }
 

@@ -3,6 +3,8 @@ const ExcelJS = require('exceljs');
 const Reserva = require('../models/Reserva');
 const Destino = require('../models/Destino');
 const { autenticar, soloAdministrador } = require('../middlewares/autenticacion');
+const { notificarAdministradores, notificarUsuario, eliminarNotificacionesSolicitud, mensajeEstado } = require('../services/notificaciones');
+const { enviarCorreoEstadoSolicitud } = require('../services/correoBrevo');
 
 const router = express.Router();
 const estadosValidos = ['Pendiente de confirmación', 'Confirmada', 'Cancelada'];
@@ -58,6 +60,15 @@ router.post('/', autenticar, async (req, res) => {
       cantidadViajeros: viajeros,
       comentario: comentario || ''
     });
+
+    await notificarAdministradores({
+      tipo: 'nueva_solicitud',
+      categoria: 'reserva',
+      codigo: reserva.codigo,
+      titulo: 'Nueva reserva recibida',
+      mensaje: `${reserva.nombreCliente} registró la reserva ${reserva.codigo} para ${reserva.destinoNombre}.`,
+      enlace: `admin.html#${reserva.codigo}`
+    }).catch((error) => console.error('No se pudo crear la notificación de reserva:', error.message));
 
     res.status(201).json({
       message: 'Reserva registrada. La disponibilidad será confirmada por nuestro equipo.',
@@ -164,11 +175,52 @@ router.patch('/:id/estado', autenticar, soloAdministrador, async (req, res) => {
   try {
     const { estado } = req.body;
     if (!estadosValidos.includes(estado)) return res.status(400).json({ error: 'El estado seleccionado no es válido.' });
-    const reserva = await Reserva.findByIdAndUpdate(req.params.id, { estado }, { new: true, runValidators: true });
+    const reserva = await Reserva.findById(req.params.id);
     if (!reserva) return res.status(404).json({ error: 'Reserva no encontrada.' });
+    const estadoAnterior = reserva.estado;
+    reserva.estado = estado;
+    await reserva.save();
+
+    if (estadoAnterior !== reserva.estado) {
+      const contenido = mensajeEstado('reserva', reserva.codigo, reserva.estado);
+      await notificarUsuario(reserva.usuario, {
+        tipo: 'estado_actualizado',
+        categoria: 'reserva',
+        codigo: reserva.codigo,
+        ...contenido,
+        enlace: `mis-reservas.html#${reserva.codigo}`
+      }).catch((error) => console.error('No se pudo crear la notificación de reserva:', error.message));
+
+      await enviarCorreoEstadoSolicitud({
+        emailCliente: reserva.emailCliente,
+        nombreCliente: reserva.nombreCliente,
+        categoria: 'reserva',
+        codigo: reserva.codigo,
+        estado: reserva.estado,
+        titulo: contenido.titulo,
+        detalle: `Destino: ${reserva.destinoNombre}. Fecha estimada: ${new Date(reserva.fechaViaje).toLocaleDateString('es-CO', { timeZone: 'UTC' })}.`
+      }).catch((error) => console.error('No se pudo enviar el correo de reserva:', error.message));
+    }
+
     res.json({ message: `La reserva ${reserva.codigo} fue actualizada a ${reserva.estado}.`, reserva });
   } catch (error) {
     res.status(400).json({ error: 'No se pudo actualizar la reserva.' });
+  }
+});
+
+router.delete('/:id', autenticar, soloAdministrador, async (req, res) => {
+  try {
+    const reserva = await Reserva.findById(req.params.id);
+    if (!reserva) return res.status(404).json({ error: 'Reserva no encontrada.' });
+
+    await Promise.all([
+      Reserva.deleteOne({ _id: reserva._id }),
+      eliminarNotificacionesSolicitud('reserva', reserva.codigo)
+    ]);
+
+    res.json({ message: `Reserva ${reserva.codigo} eliminada correctamente.` });
+  } catch (error) {
+    res.status(400).json({ error: 'No se pudo eliminar la reserva.' });
   }
 });
 

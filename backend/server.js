@@ -30,6 +30,8 @@ const solicitudVueloRoutes = require('./routes/solicitudVueloRoute');
 app.use('/api/solicitudes-vuelo', solicitudVueloRoutes);
 const favoritoRoutes = require('./routes/favoritoRoute');
 app.use('/api/favoritos', favoritoRoutes);
+const notificacionRoutes = require('./routes/notificacionRoute');
+app.use('/api/notificaciones', notificacionRoutes);
 app.get('/api/salud', (req, res) => {
   res.json({
     estado: mongoose.connection.readyState === 1 ? 'ok' : 'sin conexión',

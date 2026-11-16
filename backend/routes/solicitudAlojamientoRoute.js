@@ -3,6 +3,8 @@ const ExcelJS = require('exceljs');
 const Hotel = require('../models/Hotel');
 const SolicitudAlojamiento = require('../models/SolicitudAlojamiento');
 const { autenticar, soloAdministrador } = require('../middlewares/autenticacion');
+const { notificarAdministradores, notificarUsuario, eliminarNotificacionesSolicitud, mensajeEstado } = require('../services/notificaciones');
+const { enviarCorreoEstadoSolicitud } = require('../services/correoBrevo');
 
 const router = express.Router();
 const estadosValidos = ['Pendiente de confirmación', 'Confirmada', 'Cancelada'];
@@ -51,6 +53,15 @@ router.post('/', autenticar, async (req, res) => {
       hotelNombre: hotel.nombre, destino: hotel.destino, fechaEntrada: entrada, fechaSalida: salida,
       cantidadHuespedes: huespedes, habitaciones: cantidadHabitaciones, comentario: comentario || ''
     });
+
+    await notificarAdministradores({
+      tipo: 'nueva_solicitud',
+      categoria: 'alojamiento',
+      codigo: solicitud.codigo,
+      titulo: 'Nueva solicitud de alojamiento',
+      mensaje: `${solicitud.nombreCliente} solicitó ${solicitud.hotelNombre} para ${solicitud.destino}.`,
+      enlace: `admin.html#${solicitud.codigo}`
+    }).catch((error) => console.error('No se pudo crear la notificación de alojamiento:', error.message));
 
     res.status(201).json({ message: 'Solicitud de alojamiento registrada. Confirmaremos disponibilidad con el hotel.', solicitud: { codigo: solicitud.codigo, estado: solicitud.estado, hotel: solicitud.hotelNombre } });
   } catch (error) {
@@ -132,11 +143,52 @@ router.get('/', autenticar, soloAdministrador, async (req, res) => {
 router.patch('/:id/estado', autenticar, soloAdministrador, async (req, res) => {
   try {
     if (!estadosValidos.includes(req.body.estado)) return res.status(400).json({ error: 'El estado seleccionado no es válido.' });
-    const solicitud = await SolicitudAlojamiento.findByIdAndUpdate(req.params.id, { estado: req.body.estado }, { new: true, runValidators: true });
+    const solicitud = await SolicitudAlojamiento.findById(req.params.id);
     if (!solicitud) return res.status(404).json({ error: 'Solicitud de alojamiento no encontrada.' });
+    const estadoAnterior = solicitud.estado;
+    solicitud.estado = req.body.estado;
+    await solicitud.save();
+
+    if (estadoAnterior !== solicitud.estado) {
+      const contenido = mensajeEstado('alojamiento', solicitud.codigo, solicitud.estado);
+      await notificarUsuario(solicitud.usuario, {
+        tipo: 'estado_actualizado',
+        categoria: 'alojamiento',
+        codigo: solicitud.codigo,
+        ...contenido,
+        enlace: `mis-reservas.html#${solicitud.codigo}`
+      }).catch((error) => console.error('No se pudo crear la notificación de alojamiento:', error.message));
+
+      await enviarCorreoEstadoSolicitud({
+        emailCliente: solicitud.emailCliente,
+        nombreCliente: solicitud.nombreCliente,
+        categoria: 'alojamiento',
+        codigo: solicitud.codigo,
+        estado: solicitud.estado,
+        titulo: contenido.titulo,
+        detalle: `Hotel: ${solicitud.hotelNombre}. Destino: ${solicitud.destino}.`
+      }).catch((error) => console.error('No se pudo enviar el correo de alojamiento:', error.message));
+    }
+
     res.json({ message: `La solicitud ${solicitud.codigo} fue actualizada a ${solicitud.estado}.`, solicitud });
   } catch (error) {
     res.status(400).json({ error: 'No se pudo actualizar la solicitud de alojamiento.' });
+  }
+});
+
+router.delete('/:id', autenticar, soloAdministrador, async (req, res) => {
+  try {
+    const solicitud = await SolicitudAlojamiento.findById(req.params.id);
+    if (!solicitud) return res.status(404).json({ error: 'Solicitud de alojamiento no encontrada.' });
+
+    await Promise.all([
+      SolicitudAlojamiento.deleteOne({ _id: solicitud._id }),
+      eliminarNotificacionesSolicitud('alojamiento', solicitud.codigo)
+    ]);
+
+    res.json({ message: `Solicitud de alojamiento ${solicitud.codigo} eliminada correctamente.` });
+  } catch (error) {
+    res.status(400).json({ error: 'No se pudo eliminar la solicitud de alojamiento.' });
   }
 });
 
