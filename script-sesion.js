@@ -26,6 +26,58 @@ function enviarAInicioSesion() {
   window.location.href = 'index.html';
 }
 
+function crearEnlaceMenu(texto, href) {
+  const enlace = document.createElement('a');
+  enlace.textContent = texto;
+  enlace.href = href;
+  return enlace;
+}
+
+function cerrarMenusRallyTraver(excepto = null) {
+  document.querySelectorAll('.rt-nav-menu.is-open').forEach((menu) => {
+    if (menu !== excepto) {
+      menu.classList.remove('is-open');
+      const boton = menu.querySelector('.rt-nav-menu-toggle');
+      const desplegable = menu.querySelector('.rt-nav-dropdown');
+      if (boton) boton.setAttribute('aria-expanded', 'false');
+      if (desplegable) desplegable.hidden = true;
+    }
+  });
+}
+
+function crearMenuRallyTraver(id, etiqueta, elementos) {
+  const contenedor = document.createElement('div');
+  contenedor.className = 'rt-nav-menu';
+  contenedor.dataset.navMenu = id;
+
+  const boton = document.createElement('button');
+  boton.type = 'button';
+  boton.className = 'rt-nav-menu-toggle';
+  boton.setAttribute('aria-haspopup', 'true');
+  boton.setAttribute('aria-expanded', 'false');
+  boton.setAttribute('aria-controls', id + '-opciones');
+  boton.innerHTML = etiqueta + ' <span aria-hidden="true">⌄</span>';
+
+  const desplegable = document.createElement('div');
+  desplegable.className = 'rt-nav-dropdown';
+  desplegable.id = id + '-opciones';
+  desplegable.setAttribute('role', 'menu');
+  desplegable.hidden = true;
+  elementos.forEach((elemento) => desplegable.appendChild(elemento));
+
+  boton.addEventListener('click', (evento) => {
+    evento.stopPropagation();
+    const abrir = !contenedor.classList.contains('is-open');
+    cerrarMenusRallyTraver(contenedor);
+    contenedor.classList.toggle('is-open', abrir);
+    boton.setAttribute('aria-expanded', String(abrir));
+    desplegable.hidden = !abrir;
+  });
+
+  contenedor.append(boton, desplegable);
+  return contenedor;
+}
+
 function configurarMenuRallyTraver() {
   const boton = document.querySelector('.rt-menu-toggle');
   const nav = document.querySelector('.rt-nav');
@@ -35,41 +87,70 @@ function configurarMenuRallyTraver() {
   });
 }
 
+function compactarMenuExplorar(nav) {
+  if (nav.querySelector('[data-nav-menu="explorar"]')) return;
+  const destinos = nav.querySelector('a[href="landingpage.html"]');
+  const paquetes = nav.querySelector('a[href="landingpage.html?categoria=internacional"]');
+  const hoteles = nav.querySelector('a[href="hoteles.html"], a[href="landingpage.html?hoteles=true"]');
+  if (!destinos || !paquetes || !hoteles) return;
+
+  const explorar = crearMenuRallyTraver('explorar', 'Explorar', [
+    crearEnlaceMenu('Destinos', 'landingpage.html'),
+    crearEnlaceMenu('Vuelos', 'vuelos.html'),
+    crearEnlaceMenu('Paquetes', 'landingpage.html?paquetes=true'),
+    crearEnlaceMenu('Hoteles', 'hoteles.html')
+  ]);
+  nav.insertBefore(explorar, destinos);
+  destinos.remove();
+  paquetes.remove();
+  hoteles.remove();
+}
+
+function crearMenuCuenta(sesion) {
+  const elementos = [
+    crearEnlaceMenu('Mi perfil', 'perfil.html'),
+    crearEnlaceMenu('Mis favoritos', 'favoritos.html'),
+    crearEnlaceMenu('Mis reservas', 'mis-reservas.html')
+  ];
+  if (sesion.usuario.role === 'admin') elementos.push(crearEnlaceMenu('Administración', 'admin.html'));
+
+  const cerrar = document.createElement('button');
+  cerrar.type = 'button';
+  cerrar.className = 'rt-nav-dropdown-logout';
+  cerrar.textContent = 'Cerrar sesión';
+  cerrar.addEventListener('click', cerrarSesionRallyTraver);
+  elementos.push(cerrar);
+  return crearMenuRallyTraver('cuenta', 'Mi cuenta', elementos);
+}
+
 function configurarNavegacionSesion() {
   const nav = document.querySelector('.rt-nav');
   if (!nav) return;
+  compactarMenuExplorar(nav);
   const sesion = obtenerSesionRallyTraver();
+  if (!sesion || nav.querySelector('[data-nav-menu="cuenta"]')) return;
+
   const enlaceAcceso = nav.querySelector('.rt-login');
-
-  if (!sesion) return;
-
+  const cuenta = crearMenuCuenta(sesion);
   if (enlaceAcceso) {
-    enlaceAcceso.textContent = 'Mis reservas';
-    enlaceAcceso.href = 'mis-reservas.html';
+    nav.insertBefore(cuenta, enlaceAcceso);
+    enlaceAcceso.remove();
+  } else {
+    nav.appendChild(cuenta);
   }
+}
 
-  if (sesion.usuario.role === 'admin' && !nav.querySelector('[data-panel-admin]')) {
-    const panel = document.createElement('a');
-    panel.href = 'admin.html';
-    panel.textContent = 'Administración';
-    panel.dataset.panelAdmin = 'true';
-    nav.insertBefore(panel, enlaceAcceso || null);
-  }
-
-  if (!nav.querySelector('[data-cerrar-sesion]')) {
-    const cerrar = document.createElement('button');
-    cerrar.type = 'button';
-    cerrar.className = 'rt-logout';
-    cerrar.dataset.cerrarSesion = 'true';
-    cerrar.textContent = 'Cerrar sesión';
-    cerrar.addEventListener('click', cerrarSesionRallyTraver);
-    nav.appendChild(cerrar);
-  }
+function configurarCierreDeMenus() {
+  document.addEventListener('click', () => cerrarMenusRallyTraver());
+  document.addEventListener('keydown', (evento) => {
+    if (evento.key === 'Escape') cerrarMenusRallyTraver();
+  });
 }
 
 function configurarSesionRallyTraver() {
   configurarMenuRallyTraver();
   configurarNavegacionSesion();
+  configurarCierreDeMenus();
 }
 
 if (document.readyState === 'loading') {

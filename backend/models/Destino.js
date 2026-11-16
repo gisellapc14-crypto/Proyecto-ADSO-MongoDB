@@ -44,6 +44,7 @@ const destinoSchema = new mongoose.Schema({
   hoteles: { type: [String], default: [] },
   incluye: { type: [String], default: [] },
   galeria: { type: [String], default: [] },
+  paqueteDestacado: { type: Boolean, default: false },
   destacado: { type: Boolean, default: false },
   activo: { type: Boolean, default: true }
 }, { timestamps: true });

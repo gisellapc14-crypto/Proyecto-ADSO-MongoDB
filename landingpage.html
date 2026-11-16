@@ -15,7 +15,7 @@
     <a class="rt-brand" href="paginaprincipal.html" aria-label="Inicio RallyTraver"><img src="Images/logo.png" alt="Logo RallyTraver"><span>RallyTraver</span></a>
     <button class="rt-menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false">☰</button>
     <nav class="rt-nav" aria-label="Navegación principal">
-            <a href="paginaprincipal.html">Inicio</a><a href="landingpage.html">Destinos</a><a href="landingpage.html?categoria=internacional">Paquetes</a><a href="landingpage.html?hoteles=true">Hoteles</a><a href="nosotros.html">Acerca de nosotros</a><a href="ayuda.html">Centro de ayuda</a><a class="rt-login" href="index.html">Iniciar sesión</a>
+            <a href="paginaprincipal.html">Inicio</a><a href="landingpage.html">Destinos</a><a href="landingpage.html?categoria=internacional">Paquetes</a><a href="hoteles.html">Hoteles</a><a href="nosotros.html">Acerca de nosotros</a><a href="ayuda.html">Centro de ayuda</a><a class="rt-login" href="index.html">Iniciar sesión</a>
     </nav>
   </header>
   <main>
@@ -34,6 +34,7 @@
   <dialog class="rt-modal" id="modal-solicitud"><div class="rt-modal-content"><button class="rt-modal-close" type="button" aria-label="Cerrar">×</button><form class="rt-form" id="form-solicitud"><h2 id="solicitud-titulo">Solicitar cotización</h2><input type="hidden" id="solicitud-tipo" name="tipo"><label for="solicitud-nombre">Nombre</label><input id="solicitud-nombre" name="nombre" autocomplete="name" required><label for="solicitud-email">Correo electrónico</label><input id="solicitud-email" name="email" type="email" autocomplete="email" required><label for="solicitud-mensaje">Cuéntanos lo que necesitas</label><textarea id="solicitud-mensaje" name="mensaje" required></textarea><button type="submit">Enviar solicitud</button><p class="rt-status" aria-live="polite"></p></form></div></dialog>
   <dialog class="rt-modal" id="modal-reserva"><div class="rt-modal-content"><button class="rt-modal-close" type="button" aria-label="Cerrar">×</button><form class="rt-form" id="form-reserva"><h2>Confirmar reserva</h2><input type="hidden" id="reserva-destino-id" name="destinoId"><p class="rt-reserva-destino" id="reserva-destino-nombre"></p><p class="rt-reserva-note">Tu solicitud quedará registrada con un código de reserva. La confirmación final depende de la disponibilidad.</p><label for="reserva-fecha">Fecha estimada de viaje</label><input id="reserva-fecha" name="fechaViaje" type="date" required><label for="reserva-viajeros">Cantidad de viajeros</label><input id="reserva-viajeros" name="cantidadViajeros" type="number" min="1" max="20" value="1" required><label for="reserva-comentario">Comentario</label><textarea id="reserva-comentario" name="comentario" placeholder="Cuéntanos si tienes alguna solicitud especial."></textarea><button type="submit">Registrar reserva</button><p class="rt-status" id="estado-reserva" aria-live="polite"></p></form></div></dialog>
   <script src="script-sesion.js"></script>
+  <script src="script-favoritos.js"></script>
   <script src="script-destinos.js"></script>
 </body>
 </html>

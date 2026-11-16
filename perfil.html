@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Administra la información de tu cuenta RallyTraver.">
+  <title>Mi perfil | RallyTraver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style/stylesheet.css">
+</head>
+<body class="rt-site" data-page="perfil">
+  <header class="rt-header">
+    <a class="rt-brand" href="paginaprincipal.html" aria-label="Inicio RallyTraver"><img src="Images/logo.png" alt="Logo RallyTraver"><span>RallyTraver</span></a>
+    <button class="rt-menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false">☰</button>
+    <nav class="rt-nav" aria-label="Navegación principal"><a href="paginaprincipal.html">Inicio</a><a href="landingpage.html">Destinos</a><a href="landingpage.html?categoria=internacional">Paquetes</a><a href="hoteles.html">Hoteles</a><a href="nosotros.html">Acerca de nosotros</a><a href="ayuda.html">Centro de ayuda</a><a class="rt-login" href="index.html">Iniciar sesión</a></nav>
+  </header>
+  <main>
+    <section class="rt-catalog-hero rt-account-hero"><p class="rt-eyebrow">CUENTA RALLYTRAVER</p><h1>Mi perfil</h1><p>Actualiza tu información para que podamos acompañarte mejor en cada viaje.</p></section>
+    <section class="rt-section rt-section-alt">
+      <div class="rt-profile-layout">
+        <aside class="rt-profile-summary">
+          <div class="rt-avatar" id="perfil-avatar" aria-label="Foto de perfil"><span id="perfil-iniciales">RT</span><img id="perfil-foto" alt="Foto de perfil" hidden></div>
+          <h2 id="perfil-nombre-resumen">Tu cuenta RallyTraver</h2>
+          <p id="perfil-correo-resumen"></p>
+          <span class="rt-profile-role" id="perfil-rol">Cliente</span>
+          <div class="rt-profile-links"><a class="rt-primary" href="mis-reservas.html">Ver mis reservas</a><a class="rt-secondary" id="perfil-admin-link" href="admin.html" hidden>Ir a administración</a></div>
+        </aside>
+        <form class="rt-profile-form" id="form-perfil" novalidate>
+          <div class="rt-profile-form-heading"><div><p class="rt-eyebrow">INFORMACIÓN PERSONAL</p><h2>Datos de tu cuenta</h2></div><p>Tu correo se usa para iniciar sesión y no se modifica desde esta sección.</p></div>
+          <div class="rt-photo-control"><label for="perfil-archivo">Foto de perfil <small>Opcional · JPG, PNG o WEBP · máximo 1 MB</small></label><div><input id="perfil-archivo" type="file" accept="image/png,image/jpeg,image/webp"><button class="rt-text-button" id="quitar-foto" type="button">Quitar foto</button></div></div>
+          <div class="rt-profile-fields">
+            <label for="perfil-nombre">Nombre completo<input id="perfil-nombre" name="name" autocomplete="name" minlength="2" maxlength="80" required></label>
+            <label for="perfil-correo">Correo electrónico<input id="perfil-correo" name="email" type="email" autocomplete="email" readonly></label>
+            <label for="perfil-nacimiento">Fecha de nacimiento<input id="perfil-nacimiento" name="born" placeholder="Ej.: 15 de mayo de 1998" maxlength="60" required></label>
+            <label for="perfil-telefono">Teléfono<input id="perfil-telefono" name="phone" autocomplete="tel" minlength="7" maxlength="30" required></label>
+          </div>
+          <p class="rt-profile-status" id="perfil-estado" aria-live="polite"></p>
+          <button class="rt-primary" type="submit">Guardar cambios</button>
+        </form>
+      </div>
+    </section>
+  </main>
+  <footer class="rt-footer"><div><div class="rt-footer-brand"><img src="Images/logo.png" alt=""><span>RallyTraver</span></div><p>Agencia de viajes para descubrir experiencias a tu medida.</p></div><div><h3>Explora</h3><ul><li><a href="landingpage.html">Destinos</a></li><li><a href="landingpage.html?categoria=nacional">Nacionales</a></li><li><a href="landingpage.html?categoria=internacional">Internacionales</a></li></ul></div><div><h3>Contacto</h3><ul><li><a href="https://wa.me/573163110229" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="mailto:rallytraver4@gmail.com">rallytraver4@gmail.com</a></li></ul></div><div class="rt-copy">© 2026 RallyTraver · Agencia de viajes.</div></footer>
+  <a class="rt-whatsapp" href="https://wa.me/573163110229" target="_blank" rel="noopener" aria-label="Escribir a RallyTraver por WhatsApp">◉ WhatsApp</a>
+  <script src="script-sesion.js"></script>
+  <script src="script-perfil.js"></script>
+</body>
+</html>

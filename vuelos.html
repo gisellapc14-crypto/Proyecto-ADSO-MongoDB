@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Consulta opciones de vuelo y registra tu solicitud de cotización en RallyTraver.">
+  <title>Vuelos | RallyTraver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style/stylesheet.css">
+</head>
+<body class="rt-site" data-page="vuelos">
+  <header class="rt-header">
+    <a class="rt-brand" href="paginaprincipal.html" aria-label="Inicio RallyTraver"><img src="Images/logo.png" alt="Logo RallyTraver"><span>RallyTraver</span></a>
+    <button class="rt-menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false">☰</button>
+    <nav class="rt-nav" aria-label="Navegación principal"><a href="paginaprincipal.html">Inicio</a><a href="landingpage.html">Destinos</a><a href="landingpage.html?categoria=internacional">Paquetes</a><a href="hoteles.html">Hoteles</a><a href="nosotros.html">Acerca de nosotros</a><a href="ayuda.html">Centro de ayuda</a><a class="rt-login" href="index.html">Iniciar sesión</a></nav>
+  </header>
+
+  <main>
+    <section class="rt-flight-hero">
+      <div>
+        <p class="rt-eyebrow">VIAJA A TU MANERA</p>
+        <h1>Encuentra el vuelo ideal para tu próxima aventura.</h1>
+        <p>Compara rutas nacionales e internacionales y registra tu solicitud para que RallyTraver confirme la disponibilidad.</p>
+      </div>
+    </section>
+
+    <section class="rt-section rt-section-alt">
+      <form class="rt-flight-form" id="form-busqueda-vuelos" novalidate>
+        <div class="rt-flight-heading">
+          <div><p class="rt-eyebrow">BUSCADOR DE VUELOS</p><h2>¿A dónde quieres ir?</h2></div>
+          <p>Las tarifas y horarios se validan con la aerolínea antes de confirmar tu viaje.</p>
+        </div>
+        <div class="rt-flight-fields rt-flight-search-fields">
+          <label for="vuelo-tipo">Tipo de viaje<select id="vuelo-tipo" name="tipoViaje"><option value="Ida y vuelta">Ida y vuelta</option><option value="Solo ida">Solo ida</option></select></label>
+          <label for="vuelo-pasajeros">Viajeros<select id="vuelo-pasajeros" name="pasajeros"><option value="1">1 viajero</option><option value="2">2 viajeros</option><option value="3">3 viajeros</option><option value="4">4 viajeros</option><option value="5">5 viajeros</option><option value="6">6 viajeros</option><option value="7">7 viajeros</option><option value="8">8 viajeros</option><option value="9">9 viajeros</option></select></label>
+          <label for="vuelo-origen">Origen<select id="vuelo-origen" name="origen"><option value="">Todos los orígenes</option></select></label>
+          <label for="vuelo-destino">Destino<select id="vuelo-destino" name="destino"><option value="">Todos los destinos</option></select></label>
+          <label for="vuelo-salida">Fecha de salida<input id="vuelo-salida" name="salida" type="date"></label>
+          <label id="campo-regreso" for="vuelo-regreso">Fecha de regreso<input id="vuelo-regreso" name="regreso" type="date"></label>
+        </div>
+        <p class="rt-flight-status" id="estado-busqueda-vuelos" aria-live="polite"></p>
+        <button class="rt-primary" type="submit">Buscar opciones</button>
+      </form>
+    </section>
+
+    <section class="rt-section rt-flight-results-section" aria-labelledby="titulo-resultados-vuelos">
+      <div class="rt-section-heading">
+        <div><p class="rt-eyebrow">OPCIONES DISPONIBLES</p><h2 id="titulo-resultados-vuelos">Vuelos para tu viaje</h2><p id="descripcion-resultados-vuelos">Explora las rutas disponibles y elige la que más se ajuste a tu plan.</p></div>
+        <span class="rt-result-count" id="contador-vuelos" aria-live="polite"></span>
+      </div>
+      <div class="rt-flight-results" id="lista-vuelos" aria-live="polite"><p class="rt-empty">Cargando opciones de vuelo...</p></div>
+    </section>
+
+    <section class="rt-section rt-section-alt">
+      <div class="rt-banner">
+        <div class="rt-banner-content"><p class="rt-eyebrow">¿NECESITAS ORIENTACIÓN?</p><h2>Te acompañamos en la planeación de tu ruta.</h2><p>Si buscas una fecha, una ruta o una condición diferente, escríbenos y prepararemos una alternativa para ti.</p><a class="rt-primary" href="ayuda.html">Ir al centro de ayuda</a></div>
+        <div class="rt-banner-image" aria-hidden="true"></div>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="rt-modal" id="modal-solicitud-vuelo" aria-labelledby="titulo-modal-vuelo">
+    <div class="rt-modal-content">
+      <button class="rt-modal-close" type="button" data-cerrar-modal-vuelo aria-label="Cerrar">×</button>
+      <p class="rt-eyebrow">SOLICITUD DE VUELO</p>
+      <h2 id="titulo-modal-vuelo">Confirma los datos de tu viaje</h2>
+      <div class="rt-flight-selection" id="resumen-vuelo-seleccionado"></div>
+      <p class="rt-price-callout">La tarifa es referencial. RallyTraver confirmará disponibilidad y tarifa final con la aerolínea antes de realizar cualquier gestión.</p>
+      <form id="form-solicitud-vuelo" novalidate>
+        <input id="solicitud-vuelo-id" name="vueloId" type="hidden">
+        <div class="rt-flight-fields">
+          <label for="solicitud-tipo">Tipo de viaje<select id="solicitud-tipo" name="tipoViaje"><option value="Ida y vuelta">Ida y vuelta</option><option value="Solo ida">Solo ida</option></select></label>
+          <label for="solicitud-pasajeros">Viajeros<select id="solicitud-pasajeros" name="cantidadViajeros"><option value="1">1 viajero</option><option value="2">2 viajeros</option><option value="3">3 viajeros</option><option value="4">4 viajeros</option><option value="5">5 viajeros</option><option value="6">6 viajeros</option><option value="7">7 viajeros</option><option value="8">8 viajeros</option><option value="9">9 viajeros</option></select></label>
+          <label for="solicitud-salida">Fecha de salida<input id="solicitud-salida" name="fechaSalida" type="date" required></label>
+          <label id="campo-solicitud-regreso" for="solicitud-regreso">Fecha de regreso<input id="solicitud-regreso" name="fechaRegreso" type="date" required></label>
+        </div>
+        <label class="rt-flight-comment" for="solicitud-comentario">Comentarios opcionales<textarea id="solicitud-comentario" name="comentario" maxlength="1000" placeholder="Ej.: preferencia de horario, equipaje o una necesidad especial."></textarea></label>
+        <p class="rt-flight-status" id="estado-solicitud-vuelo" aria-live="polite"></p>
+        <button class="rt-primary" type="submit">Registrar solicitud</button>
+      </form>
+    </div>
+  </dialog>
+
+  <footer class="rt-footer"><div><div class="rt-footer-brand"><img src="Images/logo.png" alt=""><span>RallyTraver</span></div><p>Agencia de viajes para descubrir experiencias a tu medida.</p></div><div><h3>Explora</h3><ul><li><a href="landingpage.html">Destinos</a></li><li><a href="vuelos.html">Vuelos</a></li><li><a href="landingpage.html?categoria=internacional">Internacionales</a></li></ul></div><div><h3>Contacto</h3><ul><li><a href="https://wa.me/573163110229" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="mailto:rallytraver4@gmail.com">rallytraver4@gmail.com</a></li></ul></div><div class="rt-copy">© 2026 RallyTraver · Agencia de viajes.</div></footer>
+  <a class="rt-whatsapp" href="https://wa.me/573163110229" target="_blank" rel="noopener" aria-label="Escribir a RallyTraver por WhatsApp">◉ WhatsApp</a>
+  <script src="script-sesion.js"></script>
+  <script src="script-favoritos.js"></script>
+  <script src="script-vuelos.js"></script>
+</body>
+</html>

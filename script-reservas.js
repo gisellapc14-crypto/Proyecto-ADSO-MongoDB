@@ -1,4 +1,6 @@
 const API_RESERVAS_CLIENTE = 'http://localhost:8080/api/reservas';
+const API_SOLICITUDES_ALOJAMIENTO_CLIENTE = 'http://localhost:8080/api/solicitudes-alojamiento';
+const API_SOLICITUDES_VUELO_CLIENTE = 'http://localhost:8080/api/solicitudes-vuelo';
 const estadosReserva = ['Pendiente de confirmación', 'Confirmada', 'Cancelada'];
 const formatoCOPReservas = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
 
@@ -47,6 +49,16 @@ function tarjetaReserva(reserva) {
   return '<article class="rt-reservation-card"><div class="rt-reservation-card-top"><span class="rt-reservation-code">' + escaparHTML(reserva.codigo) + '</span><span class="rt-reservation-status ' + estadoClase + '">' + escaparHTML(reserva.estado) + '</span></div><h2>' + escaparHTML(reserva.destinoNombre) + '</h2><dl><div><dt>Fecha estimada</dt><dd>' + fechaCorta(reserva.fechaViaje) + '</dd></div><div><dt>Viajeros</dt><dd>' + escaparHTML(reserva.cantidadViajeros) + '</dd></div><div><dt>Precio referencial</dt><dd>' + formatoCOPReservas.format(reserva.precioReferencial || 0) + '</dd></div><div><dt>Registrada</dt><dd>' + fechaCorta(reserva.createdAt) + '</dd></div></dl>' + (reserva.comentario ? '<p class="rt-reservation-comment">' + escaparHTML(reserva.comentario) + '</p>' : '') + '</article>';
 }
 
+function tarjetaSolicitudAlojamiento(solicitud) {
+  const estadoClase = solicitud.estado === 'Confirmada' ? 'is-confirmed' : solicitud.estado === 'Cancelada' ? 'is-cancelled' : 'is-pending';
+  return '<article class="rt-reservation-card"><div class="rt-reservation-card-top"><span class="rt-reservation-code">' + escaparHTML(solicitud.codigo) + '</span><span class="rt-reservation-status ' + estadoClase + '">' + escaparHTML(solicitud.estado) + '</span></div><h2>' + escaparHTML(solicitud.hotelNombre) + '</h2><dl><div><dt>Destino</dt><dd>' + escaparHTML(solicitud.destino) + '</dd></div><div><dt>Entrada</dt><dd>' + fechaCorta(solicitud.fechaEntrada) + '</dd></div><div><dt>Salida</dt><dd>' + fechaCorta(solicitud.fechaSalida) + '</dd></div><div><dt>Huéspedes</dt><dd>' + escaparHTML(solicitud.cantidadHuespedes) + ' · ' + escaparHTML(solicitud.habitaciones) + ' hab.</dd></div><div><dt>Registrada</dt><dd>' + fechaCorta(solicitud.createdAt) + '</dd></div></dl>' + (solicitud.comentario ? '<p class="rt-reservation-comment">' + escaparHTML(solicitud.comentario) + '</p>' : '') + '</article>';
+}
+
+function tarjetaSolicitudVuelo(solicitud) {
+  const estadoClase = solicitud.estado === 'Confirmada' ? 'is-confirmed' : solicitud.estado === 'Cancelada' ? 'is-cancelled' : 'is-pending';
+  return '<article class="rt-reservation-card"><div class="rt-reservation-card-top"><span class="rt-reservation-code">' + escaparHTML(solicitud.codigo) + '</span><span class="rt-reservation-status ' + estadoClase + '">' + escaparHTML(solicitud.estado) + '</span></div><h2>' + escaparHTML(solicitud.origen) + ' → ' + escaparHTML(solicitud.destino) + '</h2><dl><div><dt>Aerolínea</dt><dd>' + escaparHTML(solicitud.aerolinea) + '</dd></div><div><dt>Salida</dt><dd>' + fechaCorta(solicitud.fechaSalida) + '</dd></div>' + (solicitud.tipoViaje === 'Ida y vuelta' ? '<div><dt>Regreso</dt><dd>' + fechaCorta(solicitud.fechaRegreso) + '</dd></div>' : '') + '<div><dt>Viajeros</dt><dd>' + escaparHTML(solicitud.cantidadViajeros) + '</dd></div><div><dt>Tarifa referencial</dt><dd>' + formatoCOPReservas.format(solicitud.precioReferencial || 0) + '</dd></div><div><dt>Registrada</dt><dd>' + fechaCorta(solicitud.createdAt) + '</dd></div></dl>' + (solicitud.comentario ? '<p class="rt-reservation-comment">' + escaparHTML(solicitud.comentario) + '</p>' : '') + '</article>';
+}
+
 async function cargarMisReservas() {
   const sesion = validarSesion();
   const contenedor = document.getElementById('lista-mis-reservas');
@@ -63,8 +75,52 @@ async function cargarMisReservas() {
   }
 }
 
+async function cargarMisSolicitudesAlojamiento() {
+  const sesion = validarSesion();
+  const contenedor = document.getElementById('lista-mis-solicitudes-alojamiento');
+  if (!sesion || !contenedor) return;
+  try {
+    const respuesta = await fetch(API_SOLICITUDES_ALOJAMIENTO_CLIENTE + '/mis-solicitudes', { headers: encabezadosAutenticados() });
+    const solicitudes = await respuestaSegura(respuesta);
+    contenedor.innerHTML = solicitudes.length ? solicitudes.map(tarjetaSolicitudAlojamiento).join('') : '<div class="rt-empty"><h2>Aún no tienes solicitudes de alojamiento.</h2><p>Explora hoteles y registra tu próxima estadía.</p><a class="rt-primary" href="hoteles.html">Explorar hoteles</a></div>';
+  } catch (error) {
+    contenedor.innerHTML = '<p class="rt-empty">' + escaparHTML(error.message) + '</p>';
+  }
+}
+
+async function cargarMisSolicitudesVuelo() {
+  const sesion = validarSesion();
+  const contenedor = document.getElementById('lista-mis-solicitudes-vuelo');
+  if (!sesion || !contenedor) return;
+  try {
+    const respuesta = await fetch(API_SOLICITUDES_VUELO_CLIENTE + '/mis-solicitudes', { headers: encabezadosAutenticados() });
+    const solicitudes = await respuestaSegura(respuesta);
+    contenedor.innerHTML = solicitudes.length ? solicitudes.map(tarjetaSolicitudVuelo).join('') : '<div class="rt-empty"><h2>Aún no tienes solicitudes de vuelo.</h2><p>Explora las opciones disponibles y registra la ruta de tu próximo viaje.</p><a class="rt-primary" href="vuelos.html">Explorar vuelos</a></div>';
+  } catch (error) {
+    contenedor.innerHTML = '<p class="rt-empty">' + escaparHTML(error.message) + '</p>';
+  }
+}
+
 function opcionesEstado(estadoActual) {
   return estadosReserva.map((estado) => '<option value="' + escaparHTML(estado) + '"' + (estado === estadoActual ? ' selected' : '') + '>' + escaparHTML(estado) + '</option>').join('');
+}
+
+const temporizadoresMensajesAdmin = {};
+
+function mostrarMensajeAdmin(idMensaje, texto, tipo = 'info') {
+  const mensaje = document.getElementById(idMensaje);
+  if (!mensaje) return;
+
+  window.clearTimeout(temporizadoresMensajesAdmin[idMensaje]);
+  mensaje.textContent = texto;
+  mensaje.className = 'rt-admin-feedback is-' + tipo;
+
+  if (tipo === 'success') {
+    temporizadoresMensajesAdmin[idMensaje] = window.setTimeout(() => {
+      mensaje.textContent = '';
+      mensaje.className = 'rt-admin-feedback';
+    }, 6500);
+  }
 }
 
 function renderizarTablaAdmin(reservas) {
@@ -110,7 +166,6 @@ async function cargarReservasAdmin() {
 }
 
 async function actualizarEstadoReserva(selector) {
-  const mensaje = document.getElementById('admin-mensaje');
   selector.disabled = true;
   try {
     const respuesta = await fetch(API_RESERVAS_CLIENTE + '/' + selector.dataset.estadoReserva + '/estado', {
@@ -118,11 +173,11 @@ async function actualizarEstadoReserva(selector) {
       headers: { 'Content-Type': 'application/json', ...encabezadosAutenticados() },
       body: JSON.stringify({ estado: selector.value })
     });
-    await respuestaSegura(respuesta);
-    if (mensaje) mensaje.textContent = 'Estado actualizado correctamente.';
+    const resultado = await respuestaSegura(respuesta);
+    mostrarMensajeAdmin('admin-mensaje', 'Reserva actualizada a ' + resultado.reserva.estado + ' correctamente.', 'success');
     await cargarResumenAdmin();
   } catch (error) {
-    if (mensaje) mensaje.textContent = error.message;
+    mostrarMensajeAdmin('admin-mensaje', error.message, 'error');
     await cargarReservasAdmin();
   } finally {
     selector.disabled = false;
@@ -154,18 +209,169 @@ async function exportarReservasExcel() {
   }
 }
 
+function renderizarTablaAlojamientos(solicitudes) {
+  const tabla = document.getElementById('tabla-alojamientos');
+  if (!tabla) return;
+  if (!solicitudes.length) {
+    tabla.innerHTML = '<tr><td colspan="7">No hay solicitudes de alojamiento registradas.</td></tr>';
+    return;
+  }
+  tabla.innerHTML = solicitudes.map((solicitud) => '<tr><td><strong>' + escaparHTML(solicitud.codigo) + '</strong></td><td>' + escaparHTML(solicitud.nombreCliente) + '<small>' + escaparHTML(solicitud.emailCliente) + '</small><small>' + escaparHTML(solicitud.telefonoCliente || 'Sin teléfono') + '</small></td><td>' + escaparHTML(solicitud.hotelNombre) + '<small>' + escaparHTML(solicitud.destino) + '</small></td><td>' + fechaCorta(solicitud.fechaEntrada) + '<small>Salida: ' + fechaCorta(solicitud.fechaSalida) + '</small></td><td>' + escaparHTML(solicitud.cantidadHuespedes) + ' huésped(es)<small>' + escaparHTML(solicitud.habitaciones) + ' habitación(es)</small></td><td><select data-estado-alojamiento="' + solicitud._id + '">' + opcionesEstado(solicitud.estado) + '</select></td><td>' + fechaCorta(solicitud.createdAt) + '</td></tr>').join('');
+  tabla.querySelectorAll('[data-estado-alojamiento]').forEach((selector) => selector.addEventListener('change', () => actualizarEstadoAlojamiento(selector)));
+}
+
+async function cargarSolicitudesAlojamientoAdmin() {
+  if (!validarSesion(true)) return;
+  const mensaje = document.getElementById('admin-mensaje-alojamientos');
+  try {
+    const respuesta = await fetch(API_SOLICITUDES_ALOJAMIENTO_CLIENTE, { headers: encabezadosAutenticados() });
+    const solicitudes = await respuestaSegura(respuesta);
+    renderizarTablaAlojamientos(solicitudes);
+    if (mensaje) mensaje.textContent = solicitudes.length + ' solicitud' + (solicitudes.length === 1 ? '' : 'es') + ' de alojamiento registrada' + (solicitudes.length === 1 ? '' : 's') + '.';
+  } catch (error) {
+    if (mensaje) mensaje.textContent = error.message;
+    const tabla = document.getElementById('tabla-alojamientos');
+    if (tabla) tabla.innerHTML = '<tr><td colspan="7">No se pudieron cargar las solicitudes de alojamiento.</td></tr>';
+  }
+}
+
+async function actualizarEstadoAlojamiento(selector) {
+  selector.disabled = true;
+  try {
+    const respuesta = await fetch(API_SOLICITUDES_ALOJAMIENTO_CLIENTE + '/' + selector.dataset.estadoAlojamiento + '/estado', {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json', ...encabezadosAutenticados() }, body: JSON.stringify({ estado: selector.value })
+    });
+    const resultado = await respuestaSegura(respuesta);
+    mostrarMensajeAdmin('admin-mensaje-alojamientos', 'Solicitud de alojamiento actualizada a ' + resultado.solicitud.estado + ' correctamente.', 'success');
+  } catch (error) {
+    mostrarMensajeAdmin('admin-mensaje-alojamientos', error.message, 'error');
+    await cargarSolicitudesAlojamientoAdmin();
+  } finally {
+    selector.disabled = false;
+  }
+}
+
+async function exportarAlojamientosExcel() {
+  const boton = document.getElementById('exportar-alojamientos');
+  const mensaje = document.getElementById('admin-mensaje-alojamientos');
+  if (!boton) return;
+  boton.disabled = true;
+  if (mensaje) mensaje.textContent = 'Generando archivo de Excel...';
+  try {
+    const respuesta = await fetch(API_SOLICITUDES_ALOJAMIENTO_CLIENTE + '/exportar/excel', { headers: encabezadosAutenticados() });
+    if (!respuesta.ok) {
+      const datos = await respuesta.json().catch(() => ({}));
+      throw new Error(datos.error || 'No se pudo generar el archivo.');
+    }
+    const archivo = await respuesta.blob();
+    const enlace = document.createElement('a');
+    enlace.href = URL.createObjectURL(archivo);
+    enlace.download = 'alojamientos-rallytraver.xlsx';
+    enlace.click();
+    URL.revokeObjectURL(enlace.href);
+    if (mensaje) mensaje.textContent = 'El archivo de alojamientos se descargó correctamente.';
+  } catch (error) {
+    if (mensaje) mensaje.textContent = error.message;
+  } finally {
+    boton.disabled = false;
+  }
+}
+
+function renderizarTablaVuelos(solicitudes) {
+  const tabla = document.getElementById('tabla-vuelos');
+  if (!tabla) return;
+  if (!solicitudes.length) {
+    tabla.innerHTML = '<tr><td colspan="7">No hay solicitudes de vuelo registradas.</td></tr>';
+    return;
+  }
+  tabla.innerHTML = solicitudes.map((solicitud) => '<tr><td><strong>' + escaparHTML(solicitud.codigo) + '</strong></td><td>' + escaparHTML(solicitud.nombreCliente) + '<small>' + escaparHTML(solicitud.emailCliente) + '</small><small>' + escaparHTML(solicitud.telefonoCliente || 'Sin teléfono') + '</small></td><td>' + escaparHTML(solicitud.origen) + '<small>Destino: ' + escaparHTML(solicitud.destino) + '</small><small>' + escaparHTML(solicitud.aerolinea) + '</small></td><td>' + escaparHTML(solicitud.tipoViaje) + '<small>Salida: ' + fechaCorta(solicitud.fechaSalida) + '</small>' + (solicitud.tipoViaje === 'Ida y vuelta' ? '<small>Regreso: ' + fechaCorta(solicitud.fechaRegreso) + '</small>' : '') + '</td><td>' + escaparHTML(solicitud.cantidadViajeros) + ' viajero(s)<small>' + formatoCOPReservas.format(solicitud.precioReferencial || 0) + '</small></td><td><select data-estado-vuelo="' + solicitud._id + '">' + opcionesEstado(solicitud.estado) + '</select></td><td>' + fechaCorta(solicitud.createdAt) + '</td></tr>').join('');
+  tabla.querySelectorAll('[data-estado-vuelo]').forEach((selector) => selector.addEventListener('change', () => actualizarEstadoVuelo(selector)));
+}
+
+async function cargarSolicitudesVueloAdmin() {
+  if (!validarSesion(true)) return;
+  const mensaje = document.getElementById('admin-mensaje-vuelos');
+  const buscar = document.getElementById('admin-buscar')?.value.trim() || '';
+  const estado = document.getElementById('admin-estado')?.value || '';
+  const parametros = new URLSearchParams();
+  if (buscar) parametros.set('buscar', buscar);
+  if (estado) parametros.set('estado', estado);
+  try {
+    const respuesta = await fetch(API_SOLICITUDES_VUELO_CLIENTE + (parametros.toString() ? '?' + parametros.toString() : ''), { headers: encabezadosAutenticados() });
+    const solicitudes = await respuestaSegura(respuesta);
+    renderizarTablaVuelos(solicitudes);
+    if (mensaje) mensaje.textContent = solicitudes.length + ' solicitud' + (solicitudes.length === 1 ? '' : 'es') + ' de vuelo registrada' + (solicitudes.length === 1 ? '' : 's') + '.';
+  } catch (error) {
+    if (mensaje) mensaje.textContent = error.message;
+    const tabla = document.getElementById('tabla-vuelos');
+    if (tabla) tabla.innerHTML = '<tr><td colspan="7">No se pudieron cargar las solicitudes de vuelo.</td></tr>';
+  }
+}
+
+async function actualizarEstadoVuelo(selector) {
+  selector.disabled = true;
+  try {
+    const respuesta = await fetch(API_SOLICITUDES_VUELO_CLIENTE + '/' + selector.dataset.estadoVuelo + '/estado', {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json', ...encabezadosAutenticados() }, body: JSON.stringify({ estado: selector.value })
+    });
+    const resultado = await respuestaSegura(respuesta);
+    mostrarMensajeAdmin('admin-mensaje-vuelos', 'Solicitud de vuelo actualizada a ' + resultado.solicitud.estado + ' correctamente.', 'success');
+  } catch (error) {
+    mostrarMensajeAdmin('admin-mensaje-vuelos', error.message, 'error');
+    await cargarSolicitudesVueloAdmin();
+  } finally {
+    selector.disabled = false;
+  }
+}
+
+async function exportarVuelosExcel() {
+  const boton = document.getElementById('exportar-vuelos');
+  const mensaje = document.getElementById('admin-mensaje-vuelos');
+  if (!boton) return;
+  boton.disabled = true;
+  if (mensaje) mensaje.textContent = 'Generando archivo de Excel...';
+  try {
+    const respuesta = await fetch(API_SOLICITUDES_VUELO_CLIENTE + '/exportar/excel', { headers: encabezadosAutenticados() });
+    if (!respuesta.ok) {
+      const datos = await respuesta.json().catch(() => ({}));
+      throw new Error(datos.error || 'No se pudo generar el archivo.');
+    }
+    const archivo = await respuesta.blob();
+    const enlace = document.createElement('a');
+    enlace.href = URL.createObjectURL(archivo);
+    enlace.download = 'vuelos-rallytraver.xlsx';
+    enlace.click();
+    URL.revokeObjectURL(enlace.href);
+    if (mensaje) mensaje.textContent = 'El archivo de vuelos se descargó correctamente.';
+  } catch (error) {
+    if (mensaje) mensaje.textContent = error.message;
+  } finally {
+    boton.disabled = false;
+  }
+}
+
 function configurarPanelAdmin() {
   if (!validarSesion(true)) return;
   document.getElementById('form-filtros-admin')?.addEventListener('submit', (evento) => {
     evento.preventDefault();
     cargarReservasAdmin();
+    cargarSolicitudesAlojamientoAdmin();
+    cargarSolicitudesVueloAdmin();
   });
   document.getElementById('exportar-reservas')?.addEventListener('click', exportarReservasExcel);
+  document.getElementById('exportar-alojamientos')?.addEventListener('click', exportarAlojamientosExcel);
+  document.getElementById('exportar-vuelos')?.addEventListener('click', exportarVuelosExcel);
   cargarReservasAdmin();
+  cargarSolicitudesAlojamientoAdmin();
+  cargarSolicitudesVueloAdmin();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   const pagina = document.body.dataset.page;
-  if (pagina === 'mis-reservas') cargarMisReservas();
+  if (pagina === 'mis-reservas') {
+    cargarMisReservas();
+    cargarMisSolicitudesAlojamiento();
+    cargarMisSolicitudesVuelo();
+  }
   if (pagina === 'admin') configurarPanelAdmin();
 });

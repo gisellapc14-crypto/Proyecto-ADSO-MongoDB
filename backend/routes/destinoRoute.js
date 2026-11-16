@@ -13,11 +13,12 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
   try {
-    const { categoria, tipoViaje, destacado, precioMinimo, precioMaximo, limite } = req.query;
+    const { categoria, tipoViaje, destacado, paquetes, precioMinimo, precioMaximo, limite } = req.query;
     const filtro = { activo: true };
     if (['nacional', 'internacional', 'pasadia'].includes(categoria)) filtro.categoria = categoria;
     if (['paquete', 'pasadia'].includes(tipoViaje)) filtro.tipoViaje = tipoViaje;
     if (destacado === 'true') filtro.destacado = true;
+    if (paquetes === 'true') filtro.paqueteDestacado = true;
     if (precioMinimo || precioMaximo) {
       filtro.precio = {};
       if (precioMinimo && !Number.isNaN(Number(precioMinimo))) filtro.precio.$gte = Number(precioMinimo);
