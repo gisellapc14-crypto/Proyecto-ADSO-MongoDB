@@ -105,6 +105,24 @@ function opcionesEstado(estadoActual) {
   return estadosReserva.map((estado) => '<option value="' + escaparHTML(estado) + '"' + (estado === estadoActual ? ' selected' : '') + '>' + escaparHTML(estado) + '</option>').join('');
 }
 
+const temporizadoresMensajesAdmin = {};
+
+function mostrarMensajeAdmin(idMensaje, texto, tipo = 'info') {
+  const mensaje = document.getElementById(idMensaje);
+  if (!mensaje) return;
+
+  window.clearTimeout(temporizadoresMensajesAdmin[idMensaje]);
+  mensaje.textContent = texto;
+  mensaje.className = 'rt-admin-feedback is-' + tipo;
+
+  if (tipo === 'success') {
+    temporizadoresMensajesAdmin[idMensaje] = window.setTimeout(() => {
+      mensaje.textContent = '';
+      mensaje.className = 'rt-admin-feedback';
+    }, 6500);
+  }
+}
+
 function renderizarTablaAdmin(reservas) {
   const tabla = document.getElementById('tabla-reservas');
   if (!tabla) return;
@@ -148,7 +166,6 @@ async function cargarReservasAdmin() {
 }
 
 async function actualizarEstadoReserva(selector) {
-  const mensaje = document.getElementById('admin-mensaje');
   selector.disabled = true;
   try {
     const respuesta = await fetch(API_RESERVAS_CLIENTE + '/' + selector.dataset.estadoReserva + '/estado', {
@@ -157,10 +174,10 @@ async function actualizarEstadoReserva(selector) {
       body: JSON.stringify({ estado: selector.value })
     });
     const resultado = await respuestaSegura(respuesta);
-    if (mensaje) mensaje.textContent = 'La reserva fue actualizada a: ' + resultado.reserva.estado + '.';
+    mostrarMensajeAdmin('admin-mensaje', 'Reserva actualizada a ' + resultado.reserva.estado + ' correctamente.', 'success');
     await cargarResumenAdmin();
   } catch (error) {
-    if (mensaje) mensaje.textContent = error.message;
+    mostrarMensajeAdmin('admin-mensaje', error.message, 'error');
     await cargarReservasAdmin();
   } finally {
     selector.disabled = false;
@@ -219,16 +236,15 @@ async function cargarSolicitudesAlojamientoAdmin() {
 }
 
 async function actualizarEstadoAlojamiento(selector) {
-  const mensaje = document.getElementById('admin-mensaje-alojamientos');
   selector.disabled = true;
   try {
     const respuesta = await fetch(API_SOLICITUDES_ALOJAMIENTO_CLIENTE + '/' + selector.dataset.estadoAlojamiento + '/estado', {
       method: 'PATCH', headers: { 'Content-Type': 'application/json', ...encabezadosAutenticados() }, body: JSON.stringify({ estado: selector.value })
     });
     const resultado = await respuestaSegura(respuesta);
-    if (mensaje) mensaje.textContent = 'La solicitud fue actualizada a: ' + resultado.solicitud.estado + '.';
+    mostrarMensajeAdmin('admin-mensaje-alojamientos', 'Solicitud de alojamiento actualizada a ' + resultado.solicitud.estado + ' correctamente.', 'success');
   } catch (error) {
-    if (mensaje) mensaje.textContent = error.message;
+    mostrarMensajeAdmin('admin-mensaje-alojamientos', error.message, 'error');
     await cargarSolicitudesAlojamientoAdmin();
   } finally {
     selector.disabled = false;
@@ -293,16 +309,15 @@ async function cargarSolicitudesVueloAdmin() {
 }
 
 async function actualizarEstadoVuelo(selector) {
-  const mensaje = document.getElementById('admin-mensaje-vuelos');
   selector.disabled = true;
   try {
     const respuesta = await fetch(API_SOLICITUDES_VUELO_CLIENTE + '/' + selector.dataset.estadoVuelo + '/estado', {
       method: 'PATCH', headers: { 'Content-Type': 'application/json', ...encabezadosAutenticados() }, body: JSON.stringify({ estado: selector.value })
     });
     const resultado = await respuestaSegura(respuesta);
-    if (mensaje) mensaje.textContent = 'La solicitud fue actualizada a: ' + resultado.solicitud.estado + '.';
+    mostrarMensajeAdmin('admin-mensaje-vuelos', 'Solicitud de vuelo actualizada a ' + resultado.solicitud.estado + ' correctamente.', 'success');
   } catch (error) {
-    if (mensaje) mensaje.textContent = error.message;
+    mostrarMensajeAdmin('admin-mensaje-vuelos', error.message, 'error');
     await cargarSolicitudesVueloAdmin();
   } finally {
     selector.disabled = false;
