@@ -1,5 +1,8 @@
-const API_HOTELES = 'http://localhost:8080/api/hoteles';
-const API_SOLICITUDES_ALOJAMIENTO = 'http://localhost:8080/api/solicitudes-alojamiento';
+const API_ORIGEN_HOTELES = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+  ? 'http://localhost:8080'
+  : 'https://rallytraver-api.onrender.com';
+const API_HOTELES = `${API_ORIGEN_HOTELES}/api/hoteles`;
+const API_SOLICITUDES_ALOJAMIENTO = `${API_ORIGEN_HOTELES}/api/solicitudes-alojamiento`;
 let hotelesRallyTraver = [];
 
 function escaparHotel(valor) {

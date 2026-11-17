@@ -1,6 +1,9 @@
-const API_DESTINOS = 'http://localhost:8080/api/destinos';
-const API_CONTACTOS = 'http://localhost:8080/api/contactos';
-const API_RESERVAS = 'http://localhost:8080/api/reservas';
+const API_ORIGEN_DESTINOS = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+  ? 'http://localhost:8080'
+  : 'https://rallytraver-api.onrender.com';
+const API_DESTINOS = `${API_ORIGEN_DESTINOS}/api/destinos`;
+const API_CONTACTOS = `${API_ORIGEN_DESTINOS}/api/contactos`;
+const API_RESERVAS = `${API_ORIGEN_DESTINOS}/api/reservas`;
 let destinos = [];
 let tipoCotizacion = 'Vuelos';
 let tipoSolicitud = 'contacto';

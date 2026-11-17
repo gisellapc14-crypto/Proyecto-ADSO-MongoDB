@@ -1,4 +1,7 @@
-const API_FAVORITOS_RALLYTRAVER = 'http://localhost:8080/api/favoritos';
+const API_ORIGEN_FAVORITOS = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+  ? 'http://localhost:8080'
+  : 'https://rallytraver-api.onrender.com';
+const API_FAVORITOS_RALLYTRAVER = `${API_ORIGEN_FAVORITOS}/api/favoritos`;
 let favoritosRallyTraver = [];
 let favoritosCargados = false;
 

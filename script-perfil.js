@@ -1,4 +1,7 @@
-const API_PERFIL = 'http://localhost:8080/api/usuarios/perfil';
+const API_ORIGEN_PERFIL = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+  ? 'http://localhost:8080'
+  : 'https://rallytraver-api.onrender.com';
+const API_PERFIL = `${API_ORIGEN_PERFIL}/api/usuarios/perfil`;
 let fotoPerfilActual = '';
 
 function iniciales(nombre) {

@@ -10,7 +10,14 @@
 6. Comprueba `http://localhost:8080/api/salud`: debe responder con `estado: ok`.
 7. Abre `registrese.html` con Live Server y registra una cuenta.
 
-MongoDB debe estar activo. La conexión local está en `backend/.env` y usa la base de datos `rallytravel`.
+La conexión se configura en `backend/.env` y usa la base de datos `rallytravel`. Para el proyecto compartido se utiliza MongoDB Atlas.
+
+## Preparación para despliegue
+
+- El backend se publica como servicio Node.js en Render desde la carpeta `backend`.
+- El frontend se prepara con `node scripts/preparar-frontend.js`; el resultado queda en `public/` y contiene solo archivos estáticos, estilos e imágenes.
+- En producción, los scripts consumen la API pública de Render; en `localhost` continúan usando `http://localhost:8080`.
+- Las variables `MONGO_URI`, `JWT_SECRET`, `BREVO_API_KEY`, `BREVO_SENDER_EMAIL` y `BREVO_SENDER_NAME` se registran como secretos en Render. No deben incluirse en GitHub.
 
 ## Cuentas de prueba y roles
 

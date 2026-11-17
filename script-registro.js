@@ -1,3 +1,7 @@
+const API_ORIGEN_REGISTRO = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+  ? 'http://localhost:8080'
+  : 'https://rallytraver-api.onrender.com';
+
 function configurarMenuExplorar() {
   const menu = document.querySelector('.platform-menu');
   const boton = document.getElementById('menu-explorar');
@@ -64,7 +68,7 @@ function configurarRegistro() {
     boton.disabled = true;
 
     try {
-      const respuesta = await fetch('http://localhost:8080/api/usuarios/registrese', {
+      const respuesta = await fetch(`${API_ORIGEN_REGISTRO}/api/usuarios/registrese`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password, born, phone })

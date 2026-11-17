@@ -1,5 +1,8 @@
-const API_VUELOS = 'http://localhost:8080/api/vuelos';
-const API_SOLICITUDES_VUELO = 'http://localhost:8080/api/solicitudes-vuelo';
+const API_ORIGEN_VUELOS = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+  ? 'http://localhost:8080'
+  : 'https://rallytraver-api.onrender.com';
+const API_VUELOS = `${API_ORIGEN_VUELOS}/api/vuelos`;
+const API_SOLICITUDES_VUELO = `${API_ORIGEN_VUELOS}/api/solicitudes-vuelo`;
 const formatoCOPVuelos = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
 
 let vuelosCatalogo = [];

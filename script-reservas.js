@@ -1,6 +1,9 @@
-const API_RESERVAS_CLIENTE = 'http://localhost:8080/api/reservas';
-const API_SOLICITUDES_ALOJAMIENTO_CLIENTE = 'http://localhost:8080/api/solicitudes-alojamiento';
-const API_SOLICITUDES_VUELO_CLIENTE = 'http://localhost:8080/api/solicitudes-vuelo';
+const API_ORIGEN_RESERVAS = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+  ? 'http://localhost:8080'
+  : 'https://rallytraver-api.onrender.com';
+const API_RESERVAS_CLIENTE = `${API_ORIGEN_RESERVAS}/api/reservas`;
+const API_SOLICITUDES_ALOJAMIENTO_CLIENTE = `${API_ORIGEN_RESERVAS}/api/solicitudes-alojamiento`;
+const API_SOLICITUDES_VUELO_CLIENTE = `${API_ORIGEN_RESERVAS}/api/solicitudes-vuelo`;
 const estadosReserva = ['Pendiente de confirmación', 'Confirmada', 'Cancelada'];
 const formatoCOPReservas = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
 

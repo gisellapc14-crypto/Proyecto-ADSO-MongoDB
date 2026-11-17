@@ -1,4 +1,7 @@
-const API_CONTACTOS = 'http://localhost:8080/api/contactos';
+const API_ORIGEN_INTERACCIONES = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+  ? 'http://localhost:8080'
+  : 'https://rallytraver-api.onrender.com';
+const API_CONTACTOS = `${API_ORIGEN_INTERACCIONES}/api/contactos`;
 
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-desplazar]').forEach((boton) => {

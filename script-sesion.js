@@ -1,5 +1,8 @@
-const API_USUARIOS = 'http://localhost:8080/api/usuarios';
-const API_NOTIFICACIONES = 'http://localhost:8080/api/notificaciones';
+const API_ORIGEN_SESION = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+  ? 'http://localhost:8080'
+  : 'https://rallytraver-api.onrender.com';
+const API_USUARIOS = `${API_ORIGEN_SESION}/api/usuarios`;
+const API_NOTIFICACIONES = `${API_ORIGEN_SESION}/api/notificaciones`;
 let intervaloNotificacionesRallyTraver = null;
 
 function obtenerSesionRallyTraver() {

@@ -6,5 +6,8 @@ backend/node_modules/
 .env
 backend/.env
 
+# Salida generada para el despliegue del frontend
+public/
+
 # Archivos temporales
 *.log
