@@ -4,11 +4,30 @@ const router = express.Router();
 const User = require("../models/user");
 const bcrypt = require("bcrypt"); // Librería para encriptar contraseñas
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const { autenticar, soloSuperadministrador } = require('../middlewares/autenticacion');
 const { notificarUsuario } = require('../services/notificaciones');
+const { enviarCorreoRecuperacionContrasena } = require('../services/correoBrevo');
+
+const DURACION_ENLACE_RECUPERACION_MS = 30 * 60 * 1000;
+const MENSAJE_RECUPERACION = 'Si existe una cuenta con ese correo, recibirás un enlace para crear una nueva contraseña.';
 
 function escaparExpresionRegular(valor) {
     return String(valor || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function obtenerUrlFrontend() {
+    const predeterminada = 'https://rallytraver-web.onrender.com';
+    const valor = String(process.env.FRONTEND_URL || predeterminada).trim().replace(/\/+$/, '');
+
+    try {
+        const url = new URL(valor);
+        if (!['http:', 'https:'].includes(url.protocol)) throw new Error('Protocolo no permitido');
+        return url.origin;
+    } catch (error) {
+        console.warn('FRONTEND_URL no es válida. Se utilizará la dirección pública predeterminada.');
+        return predeterminada;
+    }
 }
 
 // Ruta de registro de usuario
@@ -96,6 +115,82 @@ router.post("/login", async (req, res) => {
         res.status(200).json({ message: "Login exitoso", token, user: usuarioSeguro });
     } catch (error) {
         res.status(500).json({ error: "Error al iniciar sesión" });
+    }
+});
+
+// Solicita un enlace temporal para crear una contraseña nueva.
+// La respuesta no confirma si el correo existe para proteger las cuentas registradas.
+router.post('/recuperar-contrasena', async (req, res) => {
+    try {
+        const email = String(req.body.email || '').toLowerCase().trim();
+        if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+            return res.status(400).json({ error: 'Ingresa un correo electrónico válido.' });
+        }
+
+        const usuario = await User.findOne({ email }).select('+passwordResetToken +passwordResetExpires');
+        if (!usuario) return res.json({ message: MENSAJE_RECUPERACION });
+
+        const token = crypto.randomBytes(32).toString('hex');
+        const tokenCifrado = crypto.createHash('sha256').update(token).digest('hex');
+        usuario.passwordResetToken = tokenCifrado;
+        usuario.passwordResetExpires = new Date(Date.now() + DURACION_ENLACE_RECUPERACION_MS);
+        await usuario.save({ validateBeforeSave: false });
+
+        const enlaceRestablecimiento = `${obtenerUrlFrontend()}/restablecer-contrasena.html?token=${encodeURIComponent(token)}`;
+        try {
+            const resultadoCorreo = await enviarCorreoRecuperacionContrasena({
+                emailCliente: usuario.email,
+                nombreCliente: usuario.name,
+                enlaceRestablecimiento
+            });
+            if (!resultadoCorreo.enviado) throw new Error('La configuración de Brevo está incompleta.');
+        } catch (errorCorreo) {
+            await User.findByIdAndUpdate(usuario._id, {
+                $unset: { passwordResetToken: 1, passwordResetExpires: 1 }
+            });
+            console.error('No se pudo enviar el correo de recuperación:', errorCorreo.message);
+            return res.status(503).json({ error: 'No fue posible enviar el correo de recuperación. Intenta nuevamente en unos minutos.' });
+        }
+
+        res.json({ message: MENSAJE_RECUPERACION });
+    } catch (error) {
+        console.error('Error al solicitar recuperación de contraseña:', error.message);
+        res.status(500).json({ error: 'No fue posible procesar la solicitud de recuperación.' });
+    }
+});
+
+// Restablece la contraseña si el token es válido, no está vencido y no se ha usado antes.
+router.post('/restablecer-contrasena', async (req, res) => {
+    try {
+        const token = String(req.body.token || '').trim();
+        const password = String(req.body.password || '');
+
+        if (!/^[a-f\d]{64}$/i.test(token)) {
+            return res.status(400).json({ error: 'El enlace de recuperación no es válido.' });
+        }
+        if (password.length < 8 || password.length > 72) {
+            return res.status(400).json({ error: 'La nueva contraseña debe tener entre 8 y 72 caracteres.' });
+        }
+
+        const tokenCifrado = crypto.createHash('sha256').update(token).digest('hex');
+        const usuario = await User.findOne({
+            passwordResetToken: tokenCifrado,
+            passwordResetExpires: { $gt: new Date() }
+        }).select('+passwordResetToken +passwordResetExpires');
+
+        if (!usuario) {
+            return res.status(400).json({ error: 'El enlace es inválido, ya fue utilizado o venció. Solicita uno nuevo.' });
+        }
+
+        usuario.password = await bcrypt.hash(password, 10);
+        usuario.passwordResetToken = undefined;
+        usuario.passwordResetExpires = undefined;
+        await usuario.save();
+
+        res.json({ message: 'Tu contraseña fue actualizada correctamente. Ya puedes iniciar sesión.' });
+    } catch (error) {
+        console.error('Error al restablecer contraseña:', error.message);
+        res.status(500).json({ error: 'No fue posible actualizar la contraseña.' });
     }
 });
 

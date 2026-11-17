@@ -503,6 +503,33 @@ button {
   color: #00FF99;
 }
 
+.recovery-status {
+  min-height: 1.5em;
+  max-width: 520px;
+  margin: 24px auto 0;
+  color: #ffffff;
+  font-size: .95rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.recovery-status.is-error {
+  color: #ffe0e7;
+}
+
+#mensaje-confirmacion.is-error {
+  color: #ffe0e7;
+}
+
+.recovery-login-link {
+  margin: 18px 0 0;
+}
+
+.recovery-login-link a {
+  color: #ffffff;
+  font-weight: 700;
+}
+
 .oculto {
   display: none;
 }

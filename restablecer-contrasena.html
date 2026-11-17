@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear nueva contraseña - RallyTraver</title>
+  <link rel="stylesheet" href="style/stylesheet.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="recuperar-body">
+  <header>
+    <nav>
+      <ul>
+        <li><a href="paginaprincipal.html">Inicio</a></li>
+        <li><a href="nosotros.html">Acerca de Nosotros</a></li>
+        <li><a href="ayuda.html">Centro de Ayuda</a></li>
+      </ul>
+      <img src="Images/logo.png" alt="Logo RallyTraver" class="logo-nav">
+    </nav>
+  </header>
+
+  <main class="recuperar-container">
+    <h1>Crea una nueva contraseña</h1>
+    <h2>Elige una contraseña segura de al menos 8 caracteres.</h2>
+
+    <form id="restablecer-form" novalidate>
+      <label for="password">NUEVA CONTRASEÑA</label>
+      <input type="password" id="password" name="password" autocomplete="new-password" required minlength="8" maxlength="72">
+
+      <label for="confirmacion">CONFIRMA LA CONTRASEÑA</label>
+      <input type="password" id="confirmacion" name="confirmacion" autocomplete="new-password" required minlength="8" maxlength="72">
+
+      <button type="submit">Actualizar contraseña</button>
+    </form>
+
+    <p id="mensaje-restablecimiento" class="recovery-status" aria-live="polite"></p>
+    <p class="recovery-login-link"><a href="index.html">Volver a iniciar sesión</a></p>
+    <img src="Images/avion1.png" alt="" class="avion avion-izquierda">
+    <img src="Images/avion2.png" alt="" class="avion avion-derecha">
+  </main>
+
+  <script src="script-restablecer-contrasena.js"></script>
+</body>
+</html>

@@ -59,7 +59,35 @@ function crearCorreoEstado({ nombreCliente, categoria, codigo, estado, detalle }
     </div>`;
 }
 
-async function enviarCorreoEstadoSolicitud(datos) {
+function crearCorreoRecuperacion({ nombreCliente, enlaceRestablecimiento }) {
+  const nombre = escaparHTML(nombreCliente || 'cliente');
+  const enlaceSeguro = escaparHTML(enlaceRestablecimiento);
+
+  return `
+    <div style="margin:0;padding:28px 16px;background:#f4f8fc;font-family:Arial,Helvetica,sans-serif;color:#102a4c;">
+      <div style="max-width:580px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #dce8f3;">
+        <div style="padding:18px 30px;text-align:center;background:#ffffff;border-bottom:1px solid #dce8f3;">
+          <img src="${BREVO_LOGO_URL}" alt="RallyTraver - Agencia de Viajes" width="132" style="display:inline-block;width:132px;max-width:100%;height:auto;border:0;outline:none;text-decoration:none;" />
+        </div>
+        <div style="padding:26px 30px;background:#082d5d;color:#ffffff;">
+          <p style="margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:1px;">RALLYTRAVER</p>
+          <h1 style="margin:0;font-size:25px;line-height:1.2;">Recupera tu contraseña</h1>
+        </div>
+        <div style="padding:28px 30px;">
+          <p style="margin:0 0 16px;font-size:16px;line-height:1.55;">Hola, ${nombre}.</p>
+          <p style="margin:0 0 20px;font-size:15px;line-height:1.55;">Recibimos una solicitud para restablecer la contraseña de tu cuenta RallyTraver.</p>
+          <p style="margin:0 0 22px;text-align:center;">
+            <a href="${enlaceSeguro}" style="display:inline-block;padding:13px 22px;border-radius:8px;background:#ec1670;color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;">Crear nueva contraseña</a>
+          </p>
+          <p style="margin:0;font-size:14px;line-height:1.55;color:#49627c;">Por seguridad, este enlace vence en 30 minutos y solo puede utilizarse una vez.</p>
+          <p style="margin:16px 0 0;font-size:13px;line-height:1.55;color:#6b7f95;">Si no solicitaste este cambio, puedes ignorar este correo: tu contraseña actual permanecerá igual.</p>
+        </div>
+        <div style="padding:16px 30px;background:#f7fafc;color:#6b7f95;font-size:12px;line-height:1.5;">Este es un aviso de seguridad de RallyTraver.</div>
+      </div>
+    </div>`;
+}
+
+async function enviarCorreoBrevo({ emailCliente, nombreCliente, asunto, contenidoHTML }) {
   const apiKey = String(process.env.BREVO_API_KEY || '').trim();
   const remitente = String(process.env.BREVO_SENDER_EMAIL || '').trim();
   const nombreRemitente = String(process.env.BREVO_SENDER_NAME || 'RallyTraver').trim();
@@ -69,7 +97,7 @@ async function enviarCorreoEstadoSolicitud(datos) {
     return { enviado: false, motivo: 'configuracion_incompleta' };
   }
 
-  if (!datos.emailCliente) return { enviado: false, motivo: 'cliente_sin_correo' };
+  if (!emailCliente) return { enviado: false, motivo: 'cliente_sin_correo' };
 
   const respuesta = await fetch(BREVO_API_URL, {
     method: 'POST',
@@ -80,9 +108,9 @@ async function enviarCorreoEstadoSolicitud(datos) {
     },
     body: JSON.stringify({
       sender: { email: remitente, name: nombreRemitente },
-      to: [{ email: datos.emailCliente, name: datos.nombreCliente || 'Cliente RallyTraver' }],
-      subject: `${datos.titulo || 'Actualización de solicitud'} · RallyTraver`,
-      htmlContent: crearCorreoEstado(datos)
+      to: [{ email: emailCliente, name: nombreCliente || 'Cliente RallyTraver' }],
+      subject: asunto,
+      htmlContent: contenidoHTML
     })
   });
 
@@ -94,4 +122,22 @@ async function enviarCorreoEstadoSolicitud(datos) {
   return { enviado: true };
 }
 
-module.exports = { enviarCorreoEstadoSolicitud };
+async function enviarCorreoEstadoSolicitud(datos) {
+  return enviarCorreoBrevo({
+    emailCliente: datos.emailCliente,
+    nombreCliente: datos.nombreCliente,
+    asunto: `${datos.titulo || 'Actualización de solicitud'} · RallyTraver`,
+    contenidoHTML: crearCorreoEstado(datos)
+  });
+}
+
+async function enviarCorreoRecuperacionContrasena(datos) {
+  return enviarCorreoBrevo({
+    emailCliente: datos.emailCliente,
+    nombreCliente: datos.nombreCliente,
+    asunto: 'Recupera tu contraseña · RallyTraver',
+    contenidoHTML: crearCorreoRecuperacion(datos)
+  });
+}
+
+module.exports = { enviarCorreoEstadoSolicitud, enviarCorreoRecuperacionContrasena };
