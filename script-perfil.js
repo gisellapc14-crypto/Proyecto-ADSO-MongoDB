@@ -59,8 +59,8 @@ async function cargarPerfil() {
     document.getElementById('perfil-telefono').value = usuario.phone || '';
     document.getElementById('perfil-nombre-resumen').textContent = usuario.name || 'Tu cuenta RallyTraver';
     document.getElementById('perfil-correo-resumen').textContent = usuario.email || '';
-    document.getElementById('perfil-rol').textContent = usuario.role === 'admin' ? 'Administrador' : 'Cliente';
-    document.getElementById('perfil-admin-link').hidden = usuario.role !== 'admin';
+    document.getElementById('perfil-rol').textContent = usuario.role === 'superadmin' ? 'Administradora principal' : usuario.role === 'admin' ? 'Asesor' : 'Cliente';
+    document.getElementById('perfil-admin-link').hidden = !['admin', 'superadmin'].includes(usuario.role);
     mostrarFotoPerfil(usuario);
     guardarSesionRallyTraver(sesion.token, usuario);
   } catch (error) {
@@ -144,7 +144,7 @@ function configurarFormularioPerfil() {
       guardarSesionRallyTraver(sesion.token, resultado.user);
       document.getElementById('perfil-nombre-resumen').textContent = resultado.user.name;
       document.getElementById('perfil-correo-resumen').textContent = resultado.user.email;
-      document.getElementById('perfil-rol').textContent = resultado.user.role === 'admin' ? 'Administrador' : 'Cliente';
+      document.getElementById('perfil-rol').textContent = resultado.user.role === 'superadmin' ? 'Administradora principal' : resultado.user.role === 'admin' ? 'Asesor' : 'Cliente';
       mostrarFotoPerfil(resultado.user);
       estadoPerfil(resultado.message || 'Tu perfil fue actualizado correctamente.');
     } catch (error) {

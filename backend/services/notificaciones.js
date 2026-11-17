@@ -2,7 +2,7 @@ const Notificacion = require('../models/Notificacion');
 const User = require('../models/user');
 
 async function notificarAdministradores(datos) {
-  const administradores = await User.find({ role: 'admin' }).select('_id').lean();
+  const administradores = await User.find({ role: { $in: ['admin', 'superadmin'] } }).select('_id').lean();
   if (!administradores.length) return;
 
   await Notificacion.insertMany(administradores.map((administrador) => ({

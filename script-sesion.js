@@ -251,7 +251,8 @@ function crearMenuCuenta(sesion) {
     crearEnlaceMenu('Mis favoritos', 'favoritos.html'),
     crearEnlaceMenu('Mis reservas', 'mis-reservas.html')
   ];
-  if (sesion.usuario.role === 'admin') elementos.push(crearEnlaceMenu('Administración', 'admin.html'));
+  if (['admin', 'superadmin'].includes(sesion.usuario.role)) elementos.push(crearEnlaceMenu('Administración', 'admin.html'));
+  if (sesion.usuario.role === 'superadmin') elementos.push(crearEnlaceMenu('Gestión de usuarios', 'gestion-usuarios.html'));
 
   const cerrar = document.createElement('button');
   cerrar.type = 'button';

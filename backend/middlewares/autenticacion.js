@@ -18,11 +18,22 @@ async function autenticar(req, res, next) {
   }
 }
 
+function esAdministrador(usuario) {
+  return ['admin', 'superadmin'].includes(usuario?.role);
+}
+
 function soloAdministrador(req, res, next) {
-  if (!req.usuario || req.usuario.role !== 'admin') {
+  if (!esAdministrador(req.usuario)) {
     return res.status(403).json({ error: 'Esta acción solo está disponible para administración.' });
   }
   next();
 }
 
-module.exports = { autenticar, soloAdministrador };
+function soloSuperadministrador(req, res, next) {
+  if (!req.usuario || req.usuario.role !== 'superadmin') {
+    return res.status(403).json({ error: 'Esta acción solo está disponible para la administradora principal.' });
+  }
+  next();
+}
+
+module.exports = { autenticar, soloAdministrador, soloSuperadministrador, esAdministrador };

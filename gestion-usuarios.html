@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Gestión interna de usuarios y asesores de RallyTraver.">
+  <title>Gestión de usuarios | RallyTraver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style/stylesheet.css">
+</head>
+<body class="rt-site" data-page="gestion-usuarios">
+  <header class="rt-header">
+    <a class="rt-brand" href="paginaprincipal.html" aria-label="Inicio RallyTraver"><img src="Images/logo.png" alt="Logo RallyTraver"><span>RallyTraver</span></a>
+    <button class="rt-menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false">☰</button>
+    <nav class="rt-nav" aria-label="Navegación principal"><a href="paginaprincipal.html">Inicio</a><a href="landingpage.html">Destinos</a><a href="mis-reservas.html">Mis reservas</a><a class="rt-login" href="index.html">Iniciar sesión</a></nav>
+  </header>
+  <main>
+    <section class="rt-catalog-hero rt-account-hero"><p class="rt-eyebrow">ADMINISTRACIÓN PRINCIPAL</p><h1>Gestión de usuarios</h1><p>Consulta cuentas registradas y administra quién puede atender solicitudes como asesor de RallyTraver.</p></section>
+    <section class="rt-section rt-section-alt">
+      <div class="rt-admin-top"><div><h2>Equipo y clientes</h2><p id="gestion-usuarios-mensaje" class="rt-admin-feedback" aria-live="polite"></p></div><a class="rt-secondary" href="admin.html">Volver a administración</a></div>
+      <div class="rt-admin-stats" id="gestion-usuarios-resumen" aria-live="polite"></div>
+      <form class="rt-admin-filters" id="form-filtros-usuarios">
+        <div class="rt-field"><label for="usuarios-buscar">Buscar</label><input id="usuarios-buscar" name="buscar" placeholder="Nombre o correo electrónico" autocomplete="off"></div>
+        <div class="rt-field"><label for="usuarios-rol">Rol</label><select id="usuarios-rol" name="rol"><option value="">Todos los roles</option><option value="cliente">Clientes</option><option value="admin">Asesores</option><option value="superadmin">Administradora principal</option></select></div>
+        <button class="rt-secondary" type="submit">Aplicar filtros</button>
+      </form>
+      <div class="rt-admin-table-wrap"><table class="rt-admin-table rt-users-table"><thead><tr><th>Usuario</th><th>Correo electrónico</th><th>Teléfono</th><th>Rol</th><th>Registro</th><th>Acción</th></tr></thead><tbody id="tabla-usuarios"><tr><td colspan="6">Cargando usuarios...</td></tr></tbody></table></div>
+      <div class="rt-pagination" aria-label="Paginación de usuarios"><button id="usuarios-anterior" class="rt-secondary" type="button">Anterior</button><span id="usuarios-pagina" aria-live="polite">Página 1</span><button id="usuarios-siguiente" class="rt-secondary" type="button">Siguiente</button></div>
+    </section>
+  </main>
+  <footer class="rt-footer"><div><div class="rt-footer-brand"><img src="Images/logo.png" alt=""><span>RallyTraver</span></div><p>Agencia de viajes para descubrir experiencias a tu medida.</p></div><div><h3>Gestión</h3><ul><li><a href="admin.html">Administración</a></li><li><a href="gestion-usuarios.html">Usuarios</a></li></ul></div><div><h3>Contacto</h3><ul><li><a href="mailto:rallytraver4@gmail.com">rallytraver4@gmail.com</a></li></ul></div><div class="rt-copy">© 2026 RallyTraver · Agencia de viajes.</div></footer>
+  <script src="script-sesion.js"></script>
+  <script src="script-usuarios.js"></script>
+</body>
+</html>

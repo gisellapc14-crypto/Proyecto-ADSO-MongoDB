@@ -28,7 +28,7 @@ function validarSesion(requiereAdmin = false) {
     enviarAInicioSesion();
     return null;
   }
-  if (requiereAdmin && sesion.usuario.role !== 'admin') {
+  if (requiereAdmin && !['admin', 'superadmin'].includes(sesion.usuario.role)) {
     window.location.href = 'paginaprincipal.html';
     return null;
   }
