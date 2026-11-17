@@ -4,6 +4,7 @@ const API_ORIGEN_RESERVAS = ['localhost', '127.0.0.1'].includes(window.location.
 const API_RESERVAS_CLIENTE = `${API_ORIGEN_RESERVAS}/api/reservas`;
 const API_SOLICITUDES_ALOJAMIENTO_CLIENTE = `${API_ORIGEN_RESERVAS}/api/solicitudes-alojamiento`;
 const API_SOLICITUDES_VUELO_CLIENTE = `${API_ORIGEN_RESERVAS}/api/solicitudes-vuelo`;
+const API_REPORTES_ADMIN = `${API_ORIGEN_RESERVAS}/api/reportes`;
 const estadosReserva = ['Pendiente de confirmación', 'Confirmada', 'Cancelada'];
 const formatoCOPReservas = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
 
@@ -253,6 +254,32 @@ async function exportarReservasExcel() {
   }
 }
 
+async function exportarTodoExcel() {
+  const boton = document.getElementById('exportar-todo');
+  const mensaje = document.getElementById('admin-mensaje');
+  if (!boton) return;
+  boton.disabled = true;
+  if (mensaje) mensaje.textContent = 'Generando reporte integral de Excel...';
+  try {
+    const respuesta = await fetch(API_REPORTES_ADMIN + '/exportar/todo', { headers: encabezadosAutenticados() });
+    if (!respuesta.ok) {
+      const datos = await respuesta.json().catch(() => ({}));
+      throw new Error(datos.error || 'No se pudo generar el reporte integral.');
+    }
+    const archivo = await respuesta.blob();
+    const enlace = document.createElement('a');
+    enlace.href = URL.createObjectURL(archivo);
+    enlace.download = 'reporte-integral-rallytraver.xlsx';
+    enlace.click();
+    URL.revokeObjectURL(enlace.href);
+    if (mensaje) mensaje.textContent = 'El reporte integral se descargó correctamente.';
+  } catch (error) {
+    if (mensaje) mensaje.textContent = error.message;
+  } finally {
+    boton.disabled = false;
+  }
+}
+
 function renderizarTablaAlojamientos(solicitudes) {
   const tabla = document.getElementById('tabla-alojamientos');
   if (!tabla) return;
@@ -406,6 +433,7 @@ function configurarPanelAdmin() {
     cargarSolicitudesAlojamientoAdmin();
     cargarSolicitudesVueloAdmin();
   });
+  document.getElementById('exportar-todo')?.addEventListener('click', exportarTodoExcel);
   document.getElementById('exportar-reservas')?.addEventListener('click', exportarReservasExcel);
   document.getElementById('exportar-alojamientos')?.addEventListener('click', exportarAlojamientosExcel);
   document.getElementById('exportar-vuelos')?.addEventListener('click', exportarVuelosExcel);

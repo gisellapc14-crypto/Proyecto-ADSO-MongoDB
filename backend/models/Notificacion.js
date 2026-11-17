@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const notificacionSchema = new mongoose.Schema({
   destinatario: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true, index: true },
-  tipo: { type: String, enum: ['nueva_solicitud', 'estado_actualizado'], required: true },
-  categoria: { type: String, enum: ['reserva', 'alojamiento', 'vuelo'], required: true },
+  tipo: { type: String, enum: ['nueva_solicitud', 'estado_actualizado', 'rol_actualizado'], required: true },
+  categoria: { type: String, enum: ['reserva', 'alojamiento', 'vuelo', 'cuenta'], required: true },
   codigo: { type: String, required: true, trim: true, maxlength: 40 },
   titulo: { type: String, required: true, trim: true, maxlength: 120 },
   mensaje: { type: String, required: true, trim: true, maxlength: 280 },

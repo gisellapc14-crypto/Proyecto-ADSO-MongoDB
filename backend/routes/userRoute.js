@@ -5,6 +5,7 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt"); // Librería para encriptar contraseñas
 const jwt = require('jsonwebtoken');
 const { autenticar, soloSuperadministrador } = require('../middlewares/autenticacion');
+const { notificarUsuario } = require('../services/notificaciones');
 
 function escaparExpresionRegular(valor) {
     return String(valor || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -169,6 +170,18 @@ router.patch('/gestion/:id/rol', autenticar, soloSuperadministrador, async (req,
         usuario.role = rol;
         await usuario.save();
         const etiqueta = rol === 'admin' ? 'Asesor' : 'Cliente';
+
+        await notificarUsuario(usuario._id, {
+            tipo: 'rol_actualizado',
+            categoria: 'cuenta',
+            codigo: 'CUENTA',
+            titulo: rol === 'admin' ? 'Acceso de asesor habilitado' : 'Acceso de asesor actualizado',
+            mensaje: rol === 'admin'
+                ? 'Tu cuenta ahora puede gestionar reservas y solicitudes como parte del equipo asesor de RallyTraver.'
+                : 'Tu acceso de asesor fue retirado. Conservas tu cuenta y funciones como cliente de RallyTraver.',
+            enlace: 'perfil.html'
+        }).catch((error) => console.error('No se pudo crear la notificación de rol:', error.message));
+
         res.json({
             message: `${usuario.name} ahora tiene el rol de ${etiqueta}.`,
             usuario: { id: usuario._id, name: usuario.name, email: usuario.email, role: usuario.role }
